@@ -92,7 +92,10 @@ export class FornecedorService {
       email: fornecedor.email,
       telefone: fornecedor.telefone,
       endereco: fornecedor.endereco,
-      data_nascimento: format(fornecedor.data_nascimento, 'dd/MM/yyyy'),
+      data_nascimento: format(
+        addDays(new Date(fornecedor.data_nascimento), 1),
+        'dd/MM/yyyy',
+      ),
     };
   }
 
