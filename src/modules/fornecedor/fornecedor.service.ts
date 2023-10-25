@@ -132,28 +132,45 @@ export class FornecedorService {
 
     // Verifique se o CNPJ ou o email foram modificados
     if (
-      (updateFornecedorDto.cnpj &&
-        updateFornecedorDto.cnpj !== existingFornecedor.cnpj) ||
-      (updateFornecedorDto.email &&
-        updateFornecedorDto.email !== existingFornecedor.email)
+      updateFornecedorDto.cnpj &&
+      updateFornecedorDto.cnpj !== existingFornecedor.cnpj
     ) {
       // Verifique se já existe alguém com os mesmos campos de CNPJ ou email
-      const duplicateFornecedor = await this.prisma.fornecedor.findFirst({
+      const duplicateCnpj = await this.prisma.fornecedor.findFirst({
         where: {
-          OR: [
-            { cnpj: updateFornecedorDto.cnpj },
-            { email: updateFornecedorDto.email },
-          ],
+          OR: [{ cnpj: updateFornecedorDto.cnpj }],
         },
       });
 
-      if (duplicateFornecedor) {
+      if (duplicateCnpj) {
+        // Se já existe alguém com os mesmos campos de CNPJ ou email, lance uma exceção de conflito
+        throw new ConflictException('Já existe um fornecedor com o mesmo CNPJ');
+      }
+    }
+    if (
+      updateFornecedorDto.email &&
+      updateFornecedorDto.email !== existingFornecedor.email
+    ) {
+      const duplicateEmail = await this.prisma.fornecedor.findFirst({
+        where: {
+          OR: [{ email: updateFornecedorDto.email }],
+        },
+      });
+
+      if (duplicateEmail) {
         // Se já existe alguém com os mesmos campos de CNPJ ou email, lance uma exceção de conflito
         throw new ConflictException(
-          'Já existe um fornecedor com o mesmo CNPJ ou email',
+          'Já existe um fornecedor com o mesmo email',
         );
       }
     }
+
+    const isoDate =
+      updateFornecedorDto.data_nascimento.split('/').reverse().join('-') +
+      'T00:00:00.000Z';
+
+    // Adicione a data formatada ao DTO antes de criar o fornecedor
+    updateFornecedorDto.data_nascimento = isoDate;
 
     // Atualize os campos do fornecedor com base no DTO de atualização
     return this.prisma.fornecedor.update({
@@ -162,14 +179,14 @@ export class FornecedorService {
     });
   }
 
-  async remove(id: number): Promise<void | null> {
+  async remove(id: number): Promise<void> {
     const existingFornecedor = await this.prisma.fornecedor.findUnique({
       where: { id },
     });
 
     if (!existingFornecedor) {
       // Se nenhum fornecedor com o ID especificado for encontrado, retorne nulo
-      return null;
+      throw new NotFoundException(`Fornecedor com ID #${id} não encontrado`);
     }
 
     await this.prisma.fornecedor.delete({

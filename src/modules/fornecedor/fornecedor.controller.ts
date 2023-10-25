@@ -8,7 +8,6 @@ import {
   HttpCode,
   HttpStatus,
   Put,
-  NotFoundException,
 } from '@nestjs/common';
 import { FornecedorService } from './fornecedor.service';
 import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
@@ -48,11 +47,6 @@ export class FornecedorController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string) {
-    const result = await this.fornecedorService.remove(+id);
-
-    if (result === null) {
-      // Se o resultado for nulo, lance uma exceção de Not Found
-      throw new NotFoundException(`Fornecedor com ID #${id} não encontrado`);
-    }
+    return await this.fornecedorService.remove(+id);
   }
 }
