@@ -19,3 +19,42 @@ model Cliente {
   data_nascimento DateTime
   data_criacao DateTime @default(now())
 }
+
+model Fornecedor {
+  id           Int      @id @default(autoincrement())
+  nome         String
+  cnpj         String   @unique
+  email        String   @unique
+  telefone     String
+  endereco      String
+  data_nascimento DateTime
+  produtos     Produto[] 
+  data_criacao DateTime  @default(now())
+}
+
+
+model Categoria {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  data_criacao DateTime @default(now())
+  produtos  Produto[]
+}
+
+model Produto {
+  id                   Int       @id @default(autoincrement())
+  nome                 String
+  marca                String
+  descricao            String
+  id_fornecedor        Int       
+  codigo_produto       String    @unique
+  id_categoria         Int
+  unidade_medida       String
+  preco                Float
+  estoque_atual        Float     
+  categoria            Categoria  @relation(fields: [id_categoria], references: [id])
+  fornecedor           Fornecedor @relation(fields: [id_fornecedor], references: [id])
+  data_criacao         DateTime  @default(now())
+}
+
+
+
