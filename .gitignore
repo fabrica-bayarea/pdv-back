@@ -4,6 +4,7 @@
 
 # Sensitive data
 .env
+prisma/migrations/**/
 
 # Logs
 logs
