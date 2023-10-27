@@ -22,6 +22,10 @@ async function bootstrap() {
       await prisma.$disconnect();
     }
   }
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',  
+  });
   await app.listen(3000);
 }
 bootstrap();
