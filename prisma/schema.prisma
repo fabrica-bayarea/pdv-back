@@ -8,7 +8,13 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
+model Usuario {
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  senha String
+  data_criacao DateTime @default(now())
+}
 model Cliente {
   id Int @id @default(autoincrement())
   nome String

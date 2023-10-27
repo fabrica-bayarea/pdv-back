@@ -5,6 +5,8 @@
 # Sensitive data
 .env
 prisma/migrations/**/
+prisma/migrations/migration_lock.toml
+
 
 # Logs
 logs
@@ -32,7 +34,7 @@ lerna-debug.log*
 *.sublime-workspace
 
 # IDE - VSCode
-.vscode/*
+.vscode**
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
