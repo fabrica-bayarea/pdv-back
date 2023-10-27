@@ -5,6 +5,8 @@
 # Sensitive data
 .env
 prisma/migrations/**/
+prisma/migrations/migration_lock.toml
+
 
 # Logs
 logs
