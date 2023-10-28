@@ -9,9 +9,10 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
 import { PrismaService } from './prisma/prisma.service';
 import { JwtAuthGuard } from './modules/auth/jwt.auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { EstoqueModule } from './modules/estoque/estoque.module';
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, UsuarioModule],
+  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, UsuarioModule, EstoqueModule],
   controllers: [AppController],
   providers: [
     AppService, 
