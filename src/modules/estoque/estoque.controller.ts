@@ -1,12 +1,11 @@
 import { ProdutoEstoqueDTO } from './dto/produto_estoque.dto';
 import { EstoqueService } from './estoque.service';
-import { Body, Controller, ValidationPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, ValidationPipe, Post, Put, Get, Query } from '@nestjs/common';
 
 @Controller('estoque')
 export class EstoqueController {
 
     constructor(private estoqueService: EstoqueService) {
-        
     }
 
     @Post()
@@ -17,5 +16,10 @@ export class EstoqueController {
     @Put()
     async atualizarEstoque(@Body(new ValidationPipe({transform: true})) estoque:ProdutoEstoqueDTO){
         return await this.estoqueService.atualizarEstoque(estoque);
+    }
+
+    @Get()
+    async buscarEstoque(@Query('id_produto') id_produto:number){
+        return await this.estoqueService.buscarEstoque(id_produto);
     }
 }
