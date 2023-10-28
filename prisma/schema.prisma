@@ -62,6 +62,7 @@ model Produto {
   data_criacao         DateTime  @default(now())
   sub_produtos         SubProduto[] @relation("SubProduto")
   produtos             SubProduto[] @relation("Produto")
+  produtoA_estoque     ProdutoEstoque[]
   ativo                Boolean   @default(true)
 }
 
@@ -71,12 +72,14 @@ model SubProduto{
   sub_produto          Produto   @relation(name: "SubProduto",fields: [id_sub_produto], references: [id])
   produto              Produto   @relation(name: "Produto",fields: [id_produto], references: [id])
   id_produto           Int
-  quantidade           Float  
+  quantidade           Float
 }
 
-model Estoque{
+model ProdutoEstoque{
   id                   Int       @id @default(autoincrement())
-  data_hora_entrada    DateTime @default(now())
-  data_hora_saida      DateTime
+  data_hora_entrada    DateTime  @default(now())
+  data_hora_saida      DateTime?
+  quantidade           Float     @default(0)
   id_produto           Int
+  produto              Produto   @relation(fields: [id_produto], references: [id])
 }
