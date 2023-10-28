@@ -60,7 +60,23 @@ model Produto {
   categoria            Categoria  @relation(fields: [id_categoria], references: [id])
   fornecedor           Fornecedor @relation(fields: [id_fornecedor], references: [id])
   data_criacao         DateTime  @default(now())
+  sub_produtos         SubProduto[] @relation("SubProduto")
+  produtos             SubProduto[] @relation("Produto")
+  ativo                Boolean   @default(true)
 }
 
+model SubProduto{
+  id                   Int       @id @default(autoincrement())
+  id_sub_produto       Int
+  sub_produto          Produto   @relation(name: "SubProduto",fields: [id_sub_produto], references: [id])
+  produto              Produto   @relation(name: "Produto",fields: [id_produto], references: [id])
+  id_produto           Int
+  quantidade           Float  
+}
 
-
+model Estoque{
+  id                   Int       @id @default(autoincrement())
+  data_hora_entrada    DateTime @default(now())
+  data_hora_saida      DateTime
+  id_produto           Int
+}
