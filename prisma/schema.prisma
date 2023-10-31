@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+
+model Cliente {
+  id               Int       @id @default(autoincrement())
+  nome             String
+  cpf              String    @unique
+  email            String    @unique
+  telefone          String?
+  endereco          String?
+  dataNascimento    DateTime @map("DATA-NASCIMENTO")
+
+  @@map("TB_CLIENTE")
+}
+
+model Vendedor {
+  id               Int       @id @default(autoincrement())
+  cpf              String    @unique
+  email            String    @unique
+  nome             String
+  telefone          String?
+  endereco          String?
+  dataNascimento    DateTime @map("DATA-NASCIMENTO")
+
+  @@map("TB_VENDEDOR")
+}
+
+model NotaFiscal {
+  id                  Int       @id @default(autoincrement())
+  clienteId           Int
+  vendedorId          Int
+  codigoProduto       String
+  nomeProduto         String
+  unidadeMedida       String
+  grupoProduto        String
+  valorProduto        Float
+  registroFiscal      String
+  dataEmissao         DateTime @default(now()) 
+
+  @@map("TB_NOTA_FISCAL")
+}
+
+
+model ProdutoSolicitacao {
+  id                  Int       @id @default(autoincrement())
+  solicitacaoCompraId Int
+  produtoId           Int
+
+  @@map("TB_PRODUTO_SOLICITACAO")
+}
+
+model RegistroProduto {
+  id               Int       @id @default(autoincrement())
+  nome             String
+  descricaoProduto String
+  marca            String
+  unidadeMedida    String
+  estoqueAtual     String
+  preco            Float
+  fornecedor       String
+  codigoProduto    String
+  dataCadastro     DateTime
+
+  @@map("TB_REGISTRO_PRODUTOS")
+}
+
+model SolicitacaoCompra {
+  id          Int       @id @default(autoincrement())
+  clienteId   Int
+  vendedorId  Int
+
+  @@map("TB_SOLICITACAO_COMPRA")
+}
+
+model Usuario {
+  id               Int       @id @default(autoincrement())
+  email            String
+  senha            String
+  nome             String
+  endereco          String
+  dataNascimento    DateTime
+  cpf              String
+  telefone          String
+  roleId            Int
+
+  @@map("TB_USUARIO")
+}
+
+model Role {
+  id    Int     @id @default(autoincrement())
+  nome  String
+
+  @@map("TB_ROLES")
+}
