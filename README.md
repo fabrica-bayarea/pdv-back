@@ -1,6 +1,6 @@
 ![Centro Universitário IESB](public/logoIesb.png)
 
-# Nome do projeto / Backend
+# PDV/ Backend
 
  Este repositório é dedicado ao projeto PDV (Ponto de Venda).O projeto visa criar um sistema de ponto de venda eletrônico para melhorar a eficiência e gestão das transações comerciais. Este repositório contém todo o código fonte e documentação relacionada ao projeto PDV.
 
