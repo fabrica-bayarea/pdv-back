@@ -2,14 +2,15 @@
 
 # Nome do projeto / Backend
 
-## Resumo
+ Este repositório é dedicado ao projeto PDV (Ponto de Venda).O projeto visa criar um sistema de ponto de venda eletrônico para melhorar a eficiência e gestão das transações comerciais. Este repositório contém todo o código fonte e documentação relacionada ao projeto PDV.
 
-Informar o objetivo do projeto.
+## Tecnologias Utilizadas:
 
-## Tecnologias
+    • Insomnia: Ferramenta de teste de API utilizada para testar e depurar os endpoints de API do projeto.
+    • Node.js e TypeScript (TSC): O backend do projeto é desenvolvido em Node.js, uma plataforma de código aberto que permite a execução de código JavaScript no servidor. O TypeScript é usado para adicionar tipagem estática ao JavaScript, tornando o código mais seguro e fácil de manter.
+    • MySQL: Sistema de gerenciamento de banco de dados usado para armazenar dados relacionados às transações comerciais.
+    • Framework NestJS e TypeScript: Para criar uma estrutura robusta e escalável para o backend do sistema, a equipe utiliza o framework NestJS em conjunto com TypeScript. NestJS segue os princípios do Angular e fornece uma arquitetura modular e fácil de manter.
 
-- Nest.js
-- TypeScript
 
 ## Rodando localmente
 
@@ -57,11 +58,18 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Autores
+### Equipe 2º/2023
 
-Abaixo temos uma lista de pessoas que participaram deste projeto ao longo dos anos.
-
-### Equipe 1º/2023
-
-| E-mail | Nome | Função |
-| ------ | ---- | ------ |
+## Equipe: Backend:
+    • André Cordeiro Ignacio  https://github.com/AndreCordeir0
+    • Gabriel Vieira Cavalcante  https://github.com/elrate
+    • Beatryz Kleuvyn Silva Arruda  https://github.com/kleuvyn
+    
+## Frontend:
+    • Davi Marques Costa  https://github.com/davimcostaa
+    • Amanda Vieira Peres  https://github.com/imxamanda
+    • Istéfani França Costa  https://github.com/Istefanifc
+    
+##  Requisitos/Testes:
+    • Marco Antonio Rabelo Sales  https://github.com/Marcoarsales
+    • Gracielly dos Santos Ribeiro  https://github.com/GraciellySRibeiro
