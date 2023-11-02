@@ -7,51 +7,73 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Cliente {
-  id               Int       @id @default(autoincrement())
-  nome             String
-  cpf              String    @unique
-  email            String    @unique
-  telefone          String?
-  endereco          String?
-  dataNascimento    DateTime @map("DATA-NASCIMENTO")
+  id             Int      @id @default(autoincrement())
+  nome           String
+  cpf            String   @unique
+  email          String   @unique
+  telefone       String?
+  endereco       String?
+  dataNascimento DateTime @map("DATA-NASCIMENTO")
 
   @@map("TB_CLIENTE")
 }
 
 model Vendedor {
-  id               Int       @id @default(autoincrement())
-  cpf              String    @unique
-  email            String    @unique
-  nome             String
-  telefone          String?
-  endereco          String?
-  dataNascimento    DateTime @map("DATA-NASCIMENTO")
+  id             Int      @id @default(autoincrement())
+  cpf            String   @unique
+  email          String   @unique
+  nome           String
+  telefone       String?
+  endereco       String?
+  dataNascimento DateTime @map("DATA-NASCIMENTO")
 
   @@map("TB_VENDEDOR")
 }
 
 model NotaFiscal {
-  id                  Int       @id @default(autoincrement())
-  clienteId           Int
-  vendedorId          Int
-  codigoProduto       String
-  nomeProduto         String
-  unidadeMedida       String
-  grupoProduto        String
-  valorProduto        Float
-  registroFiscal      String
-  dataEmissao         DateTime @default(now()) 
+  id             Int      @id @default(autoincrement())
+  clienteId      Int
+  vendedorId     Int
+  codigoProduto  String
+  nomeProduto    String
+  unidadeMedida  String
+  grupoProduto   String
+  valorProduto   Float
+  registroFiscal String
+  dataEmissao    DateTime @default(now())
 
   @@map("TB_NOTA_FISCAL")
 }
 
+model ContagemMensal {
+  id             Int      @id @default(autoincrement())
+  nome           String
+  cpf            String   @unique
+  email          String   @unique
+  telefone       String?
+  endereco       String?
+  dataNascimento DateTime @map("DATA-NASCIMENTO")
+
+  @@map("TB_CONTAGEM_MENSAL")
+}
+
+model NotaFiscalEntrada {
+  id             Int      @id @default(autoincrement())
+  nome           String
+  cpf            String   @unique
+  email          String   @unique
+  telefone       String?
+  endereco       String?
+  dataNascimento DateTime @map("DATA-NASCIMENTO")
+  @@map("TB_NOTA_FISCAL_ENTRATDA")
+}
 
 model ProdutoSolicitacao {
-  id                  Int       @id @default(autoincrement())
+  id                  Int @id @default(autoincrement())
   solicitacaoCompraId Int
   produtoId           Int
 
@@ -59,7 +81,7 @@ model ProdutoSolicitacao {
 }
 
 model RegistroProduto {
-  id               Int       @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   nome             String
   descricaoProduto String
   marca            String
@@ -74,30 +96,30 @@ model RegistroProduto {
 }
 
 model SolicitacaoCompra {
-  id          Int       @id @default(autoincrement())
-  clienteId   Int
-  vendedorId  Int
+  id         Int @id @default(autoincrement())
+  clienteId  Int
+  vendedorId Int
 
   @@map("TB_SOLICITACAO_COMPRA")
 }
 
 model Usuario {
-  id               Int       @id @default(autoincrement())
-  email            String
-  senha            String
-  nome             String
-  endereco          String
-  dataNascimento    DateTime
-  cpf              String
-  telefone          String
-  roleId            Int
+  id             Int      @id @default(autoincrement())
+  email          String
+  senha          String
+  nome           String
+  endereco       String
+  dataNascimento DateTime
+  cpf            String
+  telefone       String
+  roleId         Int
 
   @@map("TB_USUARIO")
 }
 
 model Role {
-  id    Int     @id @default(autoincrement())
-  nome  String
+  id   Int    @id @default(autoincrement())
+  nome String
 
   @@map("TB_ROLES")
 }
