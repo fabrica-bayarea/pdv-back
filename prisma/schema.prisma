@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+//Model das entidades
 
 generator client {
   provider = "prisma-client-js"
@@ -9,18 +8,61 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
-model Cliente {
-  id             Int      @id @default(autoincrement())
-  nome           String
-  cpf            String   @unique
-  email          String   @unique
-  telefone       String?
-  endereco       String?
-  dataNascimento DateTime @map("DATA-NASCIMENTO")
-
-  @@map("TB_CLIENTE")
+model Usuario {
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  senha String
+  data_criacao DateTime @default(now())
 }
+model Cliente {
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  endereco String
+  cpf String
+  telefone String
+  data_nascimento DateTime
+  data_criacao DateTime @default(now())
+}
+
+model Fornecedor {
+  id           Int      @id @default(autoincrement())
+  nome         String
+  cnpj         String   @unique
+  email        String   @unique
+  telefone     String
+  endereco      String
+  data_nascimento DateTime
+  produtos     Produto[] 
+  data_criacao DateTime  @default(now())
+}
+
+
+model Categoria {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  data_criacao DateTime @default(now())
+  produtos  Produto[]
+}
+
+model Produto {
+  id                   Int       @id @default(autoincrement())
+  nome                 String
+  marca                String
+  descricao            String
+  id_fornecedor        Int       
+  codigo_produto       String    @unique
+  id_categoria         Int
+  unidade_medida       String
+  preco                Float
+  estoque_atual        Float     
+  categoria            Categoria  @relation(fields: [id_categoria], references: [id])
+  fornecedor           Fornecedor @relation(fields: [id_fornecedor], references: [id])
+  data_criacao         DateTime  @default(now())
+}
+
+
 
 model Vendedor {
   id             Int      @id @default(autoincrement())
@@ -29,9 +71,8 @@ model Vendedor {
   nome           String
   telefone       String?
   endereco       String?
-  dataNascimento DateTime @map("DATA-NASCIMENTO")
+  dataNascimento DateTime 
 
-  @@map("TB_VENDEDOR")
 }
 
 model NotaFiscal {
@@ -46,7 +87,6 @@ model NotaFiscal {
   registroFiscal String
   dataEmissao    DateTime @default(now())
 
-  @@map("TB_NOTA_FISCAL")
 }
 
 model ContagemMensal {
@@ -56,9 +96,8 @@ model ContagemMensal {
   email          String   @unique
   telefone       String?
   endereco       String?
-  dataNascimento DateTime @map("DATA-NASCIMENTO")
+  dataNascimento DateTime 
 
-  @@map("TB_CONTAGEM_MENSAL")
 }
 
 model NotaFiscalEntrada {
@@ -68,8 +107,7 @@ model NotaFiscalEntrada {
   email          String   @unique
   telefone       String?
   endereco       String?
-  dataNascimento DateTime @map("DATA-NASCIMENTO")
-  @@map("TB_NOTA_FISCAL_ENTRATDA")
+  dataNascimento DateTime 
 }
 
 model ProdutoSolicitacao {
@@ -77,7 +115,6 @@ model ProdutoSolicitacao {
   solicitacaoCompraId Int
   produtoId           Int
 
-  @@map("TB_PRODUTO_SOLICITACAO")
 }
 
 model RegistroProduto {
@@ -92,7 +129,6 @@ model RegistroProduto {
   codigoProduto    String
   dataCadastro     DateTime
 
-  @@map("TB_REGISTRO_PRODUTOS")
 }
 
 model SolicitacaoCompra {
@@ -100,26 +136,12 @@ model SolicitacaoCompra {
   clienteId  Int
   vendedorId Int
 
-  @@map("TB_SOLICITACAO_COMPRA")
 }
 
-model Usuario {
-  id             Int      @id @default(autoincrement())
-  email          String
-  senha          String
-  nome           String
-  endereco       String
-  dataNascimento DateTime
-  cpf            String
-  telefone       String
-  roleId         Int
 
-  @@map("TB_USUARIO")
-}
 
 model Role {
   id   Int    @id @default(autoincrement())
   nome String
 
-  @@map("TB_ROLES")
 }
