@@ -17,11 +17,11 @@ model Usuario {
 }
 model Cliente {
   id Int @id @default(autoincrement())
-  nome String
-  email String @unique
-  endereco String
   cpf String
+  email String @unique
+  nome String
   telefone String
+  endereco String
   data_nascimento DateTime
   data_criacao DateTime @default(now())
 }
@@ -77,16 +77,12 @@ model Vendedor {
 
 model NotaFiscal {
   id             Int      @id @default(autoincrement())
-  clienteId      Int
-  vendedorId     Int
-  codigoProduto  String
-  nomeProduto    String
-  unidadeMedida  String
-  grupoProduto   String
-  valorProduto   Float
-  registroFiscal String
+  tipoDeNota     String
+  modelo         String  
+  fornecedorId   Int
+  dataEntrada    DateTime @default(now())
+  numeroDaNota   String
   dataEmissao    DateTime @default(now())
-
 }
 
 model ContagemMensal {
