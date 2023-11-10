@@ -27,15 +27,15 @@ model Cliente {
 }
 
 model Fornecedor {
-  id           Int      @id @default(autoincrement())
-  nome         String
-  cnpj         String   @unique
-  email        String   @unique
-  telefone     String
-  endereco      String
-  data_nascimento DateTime
-  produtos     Produto[] 
-  data_criacao DateTime  @default(now())
+  id                 Int      @id @default(autoincrement())
+  nome_fantasia      String
+  cnpj               String   @unique
+  tipo_pessoa        String
+  inscricao_estadual String
+  razao_social       String
+  data_registro      DateTime
+  produtos           Produto[] 
+  data_criacao       DateTime  @default(now())
 }
 
 
