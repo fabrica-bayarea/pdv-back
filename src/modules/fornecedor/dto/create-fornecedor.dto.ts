@@ -11,7 +11,7 @@ export class CreateFornecedorDto {
   @IsNotEmpty()
   @IsString()
   @Length(1, 60) // Define um limite mínimo de 1 caractere e máximo de 100 caracteres
-  nome: string;
+  nome_fantasia: string;
 
   @IsNotEmpty()
   @IsString()
@@ -19,19 +19,18 @@ export class CreateFornecedorDto {
   cnpj: string;
 
   @IsNotEmpty()
-  @IsEmail()
-  @Length(1, 40) // Define um limite mínimo de 1 caractere e máximo de 100 caracteres
-  email: string;
+  @Length(1, 20) // Define um limite mínimo de 1 caractere e máximo de 100 caracteres
+  tipo_pessoa: string;
 
   @IsNotEmpty()
   @IsString()
-  @Length(1, 30) // Define um limite mínimo de 1 caractere e máximo de 20 caracteres para o telefone
-  telefone: string;
+  @Length(1, 50) // Define um limite mínimo de 1 caractere e máximo de 20 caracteres para o telefone
+  razao_social: string;
 
   @IsNotEmpty()
   @IsString()
-  @Length(1, 100) // Define um limite mínimo de 1 caractere e máximo de 200 caracteres para o endereço
-  endereco: string;
+  @Length(1, 30) // Define um limite mínimo de 1 caractere e máximo de 200 caracteres para o endereço
+  inscricao_estadual: string;
 
   @Validate((value: string) => {
     // Verifique se a data está no formato "DD/MM/YYYY"
@@ -45,5 +44,5 @@ export class CreateFornecedorDto {
     // Verifique se a data é válida usando o `date-fns`
     return isValid(parseISO(isoDate));
   })
-  data_nascimento: string;
+  data_registro: string;
 }
