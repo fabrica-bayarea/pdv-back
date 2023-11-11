@@ -26,31 +26,30 @@ export class FornecedorService {
       throw new HttpException(errors, HttpStatus.BAD_REQUEST);
     }
 
-    // Verifique se já existe um fornecedor com o mesmo email ou CNPJ
+    // Verifique se já existe um fornecedor com o mesmo CNPJ
     const existingFornecedor = await this.prisma.fornecedor.findFirst({
       where: {
         OR: [
-          { email: createFornecedorDto.email },
           { cnpj: createFornecedorDto.cnpj },
         ],
       },
     });
 
     if (existingFornecedor) {
-      // Se um fornecedor com o mesmo email ou CNPJ já existe, lance uma exceção
-      throw new NotFoundException(
-        'Fornecedor com o mesmo email ou CNPJ já existe',
+      // Se um fornecedor com o mesmo CNPJ já existe, lance uma exceção
+      throw new ConflictException(
+        'Fornecedor com o mesmo CNPJ já existe',
       );
     }
 
-    // Formate a data de nascimento para o formato ISO8601 (YYYY-MM-DD)
+    // Formate a data de registro para o formato ISO8601 (YYYY-MM-DD)
     const isoDate =
-      createFornecedorDto.data_nascimento.split('/').reverse().join('-') +
+      createFornecedorDto.data_registro.split('/').reverse().join('-') +
       'T00:00:00.000Z';
 
     // Adicione a data formatada ao DTO antes de criar o fornecedor
-    createFornecedorDto.data_nascimento = isoDate;
-    // Se não houver um fornecedor com o mesmo email ou CNPJ, crie o novo fornecedor
+    createFornecedorDto.data_registro = isoDate;
+    // Se não houver um fornecedor com o mesmo CNPJ, crie o novo fornecedor
     const newFornecedor = await this.prisma.fornecedor.create({
       data: createFornecedorDto,
     });
@@ -62,13 +61,13 @@ export class FornecedorService {
     const fornecedores = await this.prisma.fornecedor.findMany();
 
     return fornecedores.map((fornecedor) => ({
-      nome: fornecedor.nome,
+      nome_fantasia: fornecedor.nome_fantasia,
       cnpj: fornecedor.cnpj,
-      email: fornecedor.email,
-      telefone: fornecedor.telefone,
-      endereco: fornecedor.endereco,
-      data_nascimento: format(
-        addDays(new Date(fornecedor.data_nascimento), 1),
+      tipo_pessoa: fornecedor.tipo_pessoa,
+      razao_social: fornecedor.razao_social,
+      inscricao_estadual: fornecedor.inscricao_estadual,
+      data_registro: format(
+        addDays(new Date(fornecedor.data_registro), 1),
         'dd/MM/yyyy',
       ),
     }));
@@ -87,13 +86,13 @@ export class FornecedorService {
 
     // Mapeie o fornecedor para o DTO desejado
     return {
-      nome: fornecedor.nome,
+      nome_fantasia: fornecedor.nome_fantasia,
       cnpj: fornecedor.cnpj,
-      email: fornecedor.email,
-      telefone: fornecedor.telefone,
-      endereco: fornecedor.endereco,
-      data_nascimento: format(
-        addDays(new Date(fornecedor.data_nascimento), 1),
+      tipo_pessoa: fornecedor.tipo_pessoa,
+      razao_social: fornecedor.razao_social,
+      inscricao_estadual: fornecedor.inscricao_estadual,
+      data_registro: format(
+        addDays(new Date(fornecedor.data_registro), 1),
         'dd/MM/yyyy',
       ),
     };
@@ -133,12 +132,12 @@ export class FornecedorService {
       throw new HttpException(errors, HttpStatus.BAD_REQUEST);
     }
 
-    // Verifique se o CNPJ ou o email foram modificados
+    // Verifique se o CNPJ foi modificado
     if (
       updateFornecedorDto.cnpj &&
       updateFornecedorDto.cnpj !== existingFornecedor.cnpj
     ) {
-      // Verifique se já existe alguém com os mesmos campos de CNPJ ou email
+      // Verifique se já existe alguém com os mesmos campos de CNPJ
       const duplicateCnpj = await this.prisma.fornecedor.findFirst({
         where: {
           OR: [{ cnpj: updateFornecedorDto.cnpj }],
@@ -150,30 +149,13 @@ export class FornecedorService {
         throw new ConflictException('Já existe um fornecedor com o mesmo CNPJ');
       }
     }
-    if (
-      updateFornecedorDto.email &&
-      updateFornecedorDto.email !== existingFornecedor.email
-    ) {
-      const duplicateEmail = await this.prisma.fornecedor.findFirst({
-        where: {
-          OR: [{ email: updateFornecedorDto.email }],
-        },
-      });
-
-      if (duplicateEmail) {
-        // Se já existe alguém com os mesmos campos de CNPJ ou email, lance uma exceção de conflito
-        throw new ConflictException(
-          'Já existe um fornecedor com o mesmo email',
-        );
-      }
-    }
 
     const isoDate =
-      updateFornecedorDto.data_nascimento.split('/').reverse().join('-') +
+      updateFornecedorDto.data_registro.split('/').reverse().join('-') +
       'T00:00:00.000Z';
 
     // Adicione a data formatada ao DTO antes de criar o fornecedor
-    updateFornecedorDto.data_nascimento = isoDate;
+    updateFornecedorDto.data_registro = isoDate;
 
     // Atualize os campos do fornecedor com base no DTO de atualização
     return this.prisma.fornecedor.update({
