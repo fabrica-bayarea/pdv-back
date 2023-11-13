@@ -17,11 +17,11 @@ model Usuario {
 }
 model Cliente {
   id Int @id @default(autoincrement())
-  nome String
-  email String @unique
-  endereco String
   cpf String
+  email String @unique
+  nome String
   telefone String
+  endereco String
   data_nascimento DateTime
   data_criacao DateTime @default(now())
 }
@@ -64,3 +64,80 @@ model Produto {
 
 
 
+model Vendedor {
+  id             Int      @id @default(autoincrement())
+  cpf            String   @unique
+  email          String   @unique
+  nome           String
+  telefone       String?
+  endereco       String?
+  dataNascimento DateTime 
+
+}
+
+model NotaFiscal {
+  id             Int      @id @default(autoincrement())
+  tipoDeNota     String
+  modelo         String  
+  fornecedorId   Int
+  dataEntrada    DateTime @default(now())
+  numeroDaNota   String
+  dataEmissao    DateTime @default(now())
+}
+
+model ContagemMensal {
+  id             Int      @id @default(autoincrement())
+  nome           String
+  cpf            String   @unique
+  email          String   @unique
+  telefone       String?
+  endereco       String?
+  dataNascimento DateTime 
+
+}
+
+model NotaFiscalEntrada {
+  id             Int      @id @default(autoincrement())
+  nome           String
+  cpf            String   @unique
+  email          String   @unique
+  telefone       String?
+  endereco       String?
+  dataNascimento DateTime 
+}
+
+model ProdutoSolicitacao {
+  id                  Int @id @default(autoincrement())
+  solicitacaoCompraId Int
+  produtoId           Int
+
+}
+
+model RegistroProduto {
+  id               Int      @id @default(autoincrement())
+  nome             String
+  descricaoProduto String
+  marca            String
+  unidadeMedida    String
+  estoqueAtual     String
+  preco            Float
+  fornecedor       String
+  codigoProduto    String
+  dataCadastro     DateTime
+
+}
+
+model SolicitacaoCompra {
+  id         Int @id @default(autoincrement())
+  clienteId  Int
+  vendedorId Int
+
+}
+
+
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  nome String
+
+}
