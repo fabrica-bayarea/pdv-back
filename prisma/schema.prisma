@@ -17,12 +17,12 @@ model Usuario {
 }
 model Cliente {
   id Int @id @default(autoincrement())
-  cpf String
+  cpf String?
   email String @unique
-  nome String
-  telefone String
-  endereco String
-  data_nascimento DateTime
+  nome String?
+  telefone String?
+  endereco String?
+  nascimento DateTime?
   data_criacao DateTime @default(now())
 }
 

@@ -13,7 +13,7 @@ import { FornecedorService } from './fornecedor.service';
 import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
 import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
 
-@Controller('fornecedor')
+@Controller('fornecedores')
 export class FornecedorController {
   constructor(private readonly fornecedorService: FornecedorService) {}
 

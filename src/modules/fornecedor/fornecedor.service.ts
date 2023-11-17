@@ -61,6 +61,7 @@ export class FornecedorService {
     const fornecedores = await this.prisma.fornecedor.findMany();
 
     return fornecedores.map((fornecedor) => ({
+      id:fornecedor.id,
       nome_fantasia: fornecedor.nome_fantasia,
       cnpj: fornecedor.cnpj,
       tipo_pessoa: fornecedor.tipo_pessoa,
@@ -86,6 +87,7 @@ export class FornecedorService {
 
     // Mapeie o fornecedor para o DTO desejado
     return {
+      id:fornecedor.id,
       nome_fantasia: fornecedor.nome_fantasia,
       cnpj: fornecedor.cnpj,
       tipo_pessoa: fornecedor.tipo_pessoa,

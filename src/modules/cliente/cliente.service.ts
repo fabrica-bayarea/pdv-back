@@ -1,9 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { formatISO, parse } from 'date-fns';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 
+@Injectable()
 export class ClienteService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   async findAllClientes() {
     return this.prisma.cliente.findMany();
@@ -16,10 +18,10 @@ export class ClienteService {
   }
 
   async createCliente(data) {
-    if (data.dataNascimento) {
-      data.dataNascimento = new Date(data.dataNascimento).toISOString();
+    if (data.nascimento) {
+      const dataParseada = parse(data.nascimento, 'dd/MM/yyyy', new Date());
+      data.nascimento = formatISO(dataParseada);
     }
-  
     return this.prisma.cliente.create({
       data,
     });
@@ -27,6 +29,10 @@ export class ClienteService {
   
 
   async updateCliente(id, data) {
+    if (data.nascimento) {
+      const dataParseada = parse(data.nascimento, 'dd/MM/yyyy', new Date());
+      data.nascimento = formatISO(dataParseada);
+    }
     return this.prisma.cliente.update({
       where: { id },
       data,

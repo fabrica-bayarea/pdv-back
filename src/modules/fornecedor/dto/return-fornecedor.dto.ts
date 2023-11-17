@@ -1,4 +1,5 @@
 export class ReturnFornecedorDto {
+  readonly id: number;
   readonly nome_fantasia: string; // O nome do fornecedor
   readonly cnpj: string; // O CNPJ do fornecedor
   readonly tipo_pessoa: string; // O email do fornecedor
