@@ -167,3 +167,14 @@ model FichaTecnica {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+model Finalizador {
+  id            Int       @id @default(autoincrement())
+  codigo        String
+  nome          String
+  situacao      String
+  grupoReceita  String
+  bandeira      String
+  data_criacao         DateTime  @default(now())
+}

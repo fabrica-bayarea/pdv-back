@@ -14,9 +14,10 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ContagemMensalModule } from './modules/contagem-mensal/contagem-mensal.module';
 import { NotaFiscalEntradaModule } from './modules/nota-fiscal-entrada/nota-fiscal-entrada.module';
 import { ItemModule } from './modules/items/items.module';
+import { FinalizadorModule } from './modules/finalizador/finalizador.module';
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule],
+  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule],
   controllers: [AppController],
   providers: [
     AppService, 
