@@ -13,10 +13,11 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { ContagemMensalModule } from './modules/contagem-mensal/contagem-mensal.module';
 import { NotaFiscalEntradaModule } from './modules/nota-fiscal-entrada/nota-fiscal-entrada.module';
+import { ItemModule } from './modules/items/items.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ClienteModule],
+  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, ClienteModule],
   controllers: [AppController],
   providers: [
     AppService, 
