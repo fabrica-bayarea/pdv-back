@@ -134,10 +134,36 @@ model SolicitacaoCompra {
 
 }
 
-
-
 model Role {
   id   Int    @id @default(autoincrement())
   nome String
 
+}
+
+
+model Item {
+  id            Int       @id @default(autoincrement())
+  codigoProduto String    @unique
+  nomeProduto   String
+  unidadeMedida String
+  valorUnitario Float
+  grupoItem     String
+  grupoDespesa  String
+  despesa       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FichaTecnica {
+  id             Int      @id @default(autoincrement())
+  codigoProduto String   @unique
+  nomeProduto   String
+  unidadeMedida String
+  valorUnitario Float
+  quantidade    Int
+  totalUnitario Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
