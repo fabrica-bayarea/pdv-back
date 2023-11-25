@@ -27,6 +27,18 @@ export class NotaFiscalService {
   }
 
   async createNotaFiscal(data: any) {
+    if (data.fornecedorId) {
+      data.fornecedorId = Number(data.fornecedorId);
+    }
+    if (data.dataEntrada) {
+      var partesTexto = data.dataEntrada.split('/');
+      data.dataEntrada = new Date(`${partesTexto[2]}-${partesTexto[1]}-${partesTexto[0]}`).toISOString();
+    }
+    if (data.dataEmissao) {
+      var partesTexto = data.dataEmissao.split('/');
+      data.dataEmissao = new Date(`${partesTexto[2]}-${partesTexto[1]}-${partesTexto[0]}`).toISOString();
+    }
+
     return this.prisma.notaFiscal.create({
       data,
     });

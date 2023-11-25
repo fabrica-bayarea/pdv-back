@@ -16,8 +16,11 @@ export class VendedorService {
     });
   }
 
-  async create(data: Vendedor): Promise<Vendedor> {
-    data.dataNascimento = new Date("1998-01-15T00:00:00.000Z");
+  async create(data) {
+    if (data.dataNascimento) {
+      var partesTexto = data.dataNascimento.split('/');
+      data.dataNascimento = new Date(`${partesTexto[2]}-${partesTexto[1]}-${partesTexto[0]}`).toISOString();
+    }
     return this.prisma.vendedor.create({
       data,
     });

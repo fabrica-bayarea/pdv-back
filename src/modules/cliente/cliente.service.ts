@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-
+@Injectable()
 export class ClienteService {
   constructor(private readonly prisma: PrismaService) {}
 
@@ -16,8 +16,9 @@ export class ClienteService {
   }
 
   async createCliente(data) {
-    if (data.dataNascimento) {
-      data.dataNascimento = new Date(data.dataNascimento).toISOString();
+    if (data.data_nascimento) {
+      var partesTexto = data.data_nascimento.split('/');
+      data.data_nascimento = new Date(`${partesTexto[2]}-${partesTexto[1]}-${partesTexto[0]}`).toISOString();
     }
   
     return this.prisma.cliente.create({
