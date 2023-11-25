@@ -36,20 +36,20 @@ export class FinalizadorService {
 
     // Mapeia os dados para o DTO antes de retorná-los
     return finalizadores.map((finalizador) => {
-      const { codigo, nome, situacao, grupoReceita, bandeira } = finalizador;
-      return { codigo, nome, situacao, grupoReceita, bandeira };
+      const { id, codigo, nome, situacao, grupoReceita, bandeira } = finalizador;
+      return { id, codigo, nome, situacao, grupoReceita, bandeira };
     });
   }
 
   async findOne(id: number): Promise<ReturnFinalizadorDto | null> {
     const finalizador: Finalizador | null = await this.prisma.finalizador.findUnique({ where: { id } });
-
+  
     if (!finalizador) {
       throw new NotFoundException(`Finalizador com ID ${id} não encontrado`);
     }
-
-    const { codigo, nome, situacao, grupoReceita, bandeira } = finalizador;
-    return { codigo, nome, situacao, grupoReceita, bandeira };
+  
+    const { id: idFinalizador, codigo, nome, situacao, grupoReceita, bandeira } = finalizador;
+    return { id: idFinalizador, codigo, nome, situacao, grupoReceita, bandeira };
   }
 
   async update(id: number, updateFinalizadorDto: CreateFinalizadorDto): Promise<Finalizador> {
