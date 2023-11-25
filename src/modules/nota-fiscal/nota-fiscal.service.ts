@@ -57,9 +57,12 @@ export class NotaFiscalService {
       throw new NotFoundException('Nota fiscal não encontrada.');
     }
 
-    if (data.dataEmissao) {
-      throw new Error('Data de emissão não pode ser atualizada!');
-    }
+    data.id = id;
+    data.dataEmissao = existingNotaFiscal.dataEmissao;
+    data.dataEntrada = existingNotaFiscal.dataEntrada;
+    // if (data.dataEmissao) {
+    //   throw new Error('Data de emissão não pode ser atualizada!');
+    // }
 
     return this.prisma.notaFiscal.update({
       where: { id },
