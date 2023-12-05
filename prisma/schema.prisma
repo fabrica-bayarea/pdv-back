@@ -109,8 +109,10 @@ model NotaFiscalEntrada {
 model ProdutoSolicitacao {
   id                  Int @id @default(autoincrement())
   solicitacaoCompraId Int
-  produtoId           Int
-
+  codigo_produto      String
+  quantidade          Int
+  controle            String?
+  descricao           String?
 }
 
 model RegistroProduto {
@@ -131,7 +133,8 @@ model SolicitacaoCompra {
   id         Int @id @default(autoincrement())
   clienteId  Int
   vendedorId Int
-
+  ativo      Boolean
+  observacao  String?
 }
 
 model Role {

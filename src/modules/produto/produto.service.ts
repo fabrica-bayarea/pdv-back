@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   HttpException,
   HttpStatus,
@@ -105,6 +106,7 @@ export class ProdutoService {
 
     // Mapeie os produtos para o ReturnProdutoDto
     return produtos.map((produto) => ({
+      id: produto.id,
       nome: produto.nome,
       marca: produto.marca,
       descricao: produto.descricao,
@@ -132,6 +134,7 @@ export class ProdutoService {
     }
 
     return {
+      id: produto.id,
       nome: produto.nome,
       marca: produto.marca,
       descricao: produto.descricao,
@@ -259,6 +262,33 @@ export class ProdutoService {
     // Use o Prisma para remover o produto pelo ID
     await this.prisma.produto.delete({
       where: { id },
+    });
+  }
+  async findByCodigoProduto(codigoProduto: string): Promise<Produto | null> {
+    const produto = await this.prisma.produto.findFirst({
+      where: {
+        codigo_produto: codigoProduto,
+      },
+    });
+  
+    return produto;
+  }
+  async descontarEstoque(codigoProduto: string, quantidade: number): Promise<void> {
+    const existingProduto = await this.findByCodigoProduto(codigoProduto);
+
+    if (!existingProduto) {
+      throw new NotFoundException(`Produto com código ${codigoProduto} não encontrado`);
+    }
+
+    if (existingProduto.estoque_atual < quantidade) {
+      throw new BadRequestException(`Quantidade insuficiente em estoque para o produto ${codigoProduto}`);
+    }
+
+    const novoEstoque = existingProduto.estoque_atual - quantidade;
+
+    await this.prisma.produto.update({
+      where: { id:existingProduto.id },
+      data: { estoque_atual: novoEstoque },
     });
   }
 }

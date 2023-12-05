@@ -16,9 +16,11 @@ import { NotaFiscalEntradaModule } from './modules/nota-fiscal-entrada/nota-fisc
 import { ItemModule } from './modules/items/items.module';
 import { FinalizadorModule } from './modules/finalizador/finalizador.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
+import { SolicitacaoCompraModule } from './modules/solicitacao_compra/solicitacao_compra.module';
+import { ProdutoSolicitacaoModule } from './modules/produto_solicitacao/produto_solicitacao.module';
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule],
+  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule],
   controllers: [AppController],
   providers: [
     AppService, 
