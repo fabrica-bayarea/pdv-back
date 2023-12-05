@@ -18,6 +18,12 @@ export class ProdutoSolicitacaoController {
     return this.produtoSolicitacaoService.findAll();
   }
 
+  @Get('solicitacao/:solicitacaoCompraId') 
+  findAllBySolicitacao(@Param('solicitacaoCompraId') solicitacaoCompraId: string) {
+    return this.produtoSolicitacaoService.findAllBySolicitacaoCompraId(+solicitacaoCompraId);
+  }
+
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.produtoSolicitacaoService.findOne(+id);

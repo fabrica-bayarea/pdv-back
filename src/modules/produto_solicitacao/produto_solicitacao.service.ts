@@ -288,4 +288,42 @@ export class ProdutoSolicitacaoService {
     // Desativar a solicitação de compra após a finalização
     await this.solicitacaoCompraService.desativar(solicitacaoCompraId);
   }
+  async findAllBySolicitacaoCompraId(solicitacaoCompraId: number): Promise<ReturnProdutoSolicitacaoCompletoDto[]> {
+    const produtoSolicitacoes = await this.prisma.produtoSolicitacao.findMany({
+      where: {
+        solicitacaoCompraId,
+      },
+    });
+  
+    const produtosCompletos: ReturnProdutoSolicitacaoCompletoDto[] = [];
+  
+    for (const produtoSolicitacao of produtoSolicitacoes) {
+      const produto = await this.produtoService.findByCodigoProduto(produtoSolicitacao.codigo_produto);
+  
+      if (produto) {
+        const produtoCompleto: ReturnProdutoSolicitacaoCompletoDto = {
+          id: produtoSolicitacao.id,
+          solicitacaoCompraId: produtoSolicitacao.solicitacaoCompraId,
+          codigo_produto: produtoSolicitacao.codigo_produto,
+          nome_produto: produto.nome,
+          quantidade: produtoSolicitacao.quantidade,
+          valor_unit: produto.preco,
+          valor_subtotal: produtoSolicitacao.quantidade * produto.preco,
+          controle: produtoSolicitacao.controle,
+          descricao: produtoSolicitacao.descricao,
+        };
+  
+        produtosCompletos.push(produtoCompleto);
+      }
+    }
+  
+    if (produtosCompletos.length === 0) {
+      // Se não houver produtos para essa solicitação de compra, você pode retornar null ou lançar uma exceção
+      // Aqui está um exemplo de lançamento de uma exceção NotFound caso nenhum produto seja encontrado
+      throw new NotFoundException(`Nenhum produto encontrado para a solicitação de compra #${solicitacaoCompraId}`);
+    }
+  
+    return produtosCompletos;
+  }
+  
 }
