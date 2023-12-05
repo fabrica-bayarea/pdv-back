@@ -1,4 +1,5 @@
 export class ReturnProdutoDto {
+  readonly id: number;
   readonly nome: string;
   readonly marca: string;
   readonly descricao: string;
