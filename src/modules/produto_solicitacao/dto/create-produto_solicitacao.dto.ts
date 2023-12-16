@@ -5,7 +5,7 @@ export class CreateProdutoSolicitacaoDto {
   solicitacaoCompraId: number;
 
   @IsString()
-  @MinLength(7)
+  @MinLength(6)
   @MaxLength(30)
   codigo_produto: string;
 
