@@ -18,9 +18,13 @@ import { FinalizadorModule } from './modules/finalizador/finalizador.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
 import { SolicitacaoCompraModule } from './modules/solicitacao_compra/solicitacao_compra.module';
 import { ProdutoSolicitacaoModule } from './modules/produto_solicitacao/produto_solicitacao.module';
+import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule],
+  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule,    ConfigModule.forRoot(),  
+  ],
   controllers: [AppController],
   providers: [
     AppService, 
@@ -29,6 +33,7 @@ import { ProdutoSolicitacaoModule } from './modules/produto_solicitacao/produto_
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    
   ],
 })
 export class AppModule {}
