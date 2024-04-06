@@ -4,9 +4,6 @@ import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
-
-
-
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
@@ -20,7 +17,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         return {
           secret: config.get<string>('JWT_SECRET_KEY'),
           signOptions: {
-            expiresIn:  '3000',
+            expiresIn:  '900000',
           },
         };
       },
