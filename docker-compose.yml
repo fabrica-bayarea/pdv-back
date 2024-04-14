@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  pdv:
+    container_name: pdv
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - mysql 
+    networks:
+      - pdv-networks
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:3306
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - pdv-networks
+volumes:
+  mysql:
+    name: ${DB_NAME}
+networks:
+  pdv-networks:
+    driver: bridge
