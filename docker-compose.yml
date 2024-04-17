@@ -10,27 +10,28 @@ services:
     volumes:
       - ./src:/app/src
     depends_on:
-      - mysql 
-    networks:
-      - pdv-networks
+      - mysql
+      - migration
+  migration:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: 'npx prisma migrate dev --name init'
+    depends_on: 
+      - mysql
   mysql:
-    image: mysql:latest
     container_name: mysql
+    image: mysql:latest
+    env_file:
+      - .env
     environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_TCP_PORT: 3307
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+      MYSQL_DATABASE: $DB_NAME
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASSWORD
     ports:
-      - "3307:3307"
+      - "3306:3306"
     volumes:
-      - mysql:/var/lib/mysql
-    networks:
-      - pdv-networks
+      - mysql_data:/var/lib/mysql
 volumes:
-  mysql:
-    name: ${DB_NAME}
-networks:
-  pdv-networks:
-    driver: bridge
+  mysql_data:
