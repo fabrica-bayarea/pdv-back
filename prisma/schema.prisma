@@ -8,61 +8,63 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 model Usuario {
-  id Int @id @default(autoincrement())
-  nome String
-  email String @unique
-  senha String
-  data_criacao DateTime @default(now())
+  id           Int        @id @default(autoincrement())
+  nome         String
+  email        String     @unique
+  senha        String
+  data_criacao DateTime   @default(now())
+  Carrinho     Carrinho[]
 }
+
 model Cliente {
-  id Int @id @default(autoincrement())
-  cpf String
-  email String @unique
-  nome String
-  telefone String
-  endereco String
+  id              Int        @id @default(autoincrement())
+  cpf             String
+  email           String     @unique
+  nome            String
+  telefone        String
+  endereco        String
   data_nascimento DateTime
-  data_criacao DateTime @default(now())
+  data_criacao    DateTime   @default(now())
+  Carrinho        Carrinho[]
 }
 
 model Fornecedor {
-  id                 Int      @id @default(autoincrement())
+  id                 Int       @id @default(autoincrement())
   nome_fantasia      String
-  cnpj               String   @unique
+  cnpj               String    @unique
   tipo_pessoa        String
   inscricao_estadual String
   razao_social       String
   data_registro      DateTime
-  produtos           Produto[] 
+  produtos           Produto[]
   data_criacao       DateTime  @default(now())
 }
 
-
 model Categoria {
-  id        Int       @id @default(autoincrement())
-  nome      String
-  data_criacao DateTime @default(now())
-  produtos  Produto[]
+  id           Int       @id @default(autoincrement())
+  nome         String
+  data_criacao DateTime  @default(now())
+  produtos     Produto[]
 }
 
 model Produto {
-  id                   Int       @id @default(autoincrement())
-  nome                 String
-  marca                String
-  descricao            String
-  id_fornecedor        Int       
-  codigo_produto       String    @unique
-  id_categoria         Int
-  unidade_medida       String
-  preco                Float
-  estoque_atual        Float     
-  categoria            Categoria  @relation(fields: [id_categoria], references: [id])
-  fornecedor           Fornecedor @relation(fields: [id_fornecedor], references: [id])
-  data_criacao         DateTime  @default(now())
+  id             Int            @id @default(autoincrement())
+  nome           String
+  marca          String
+  descricao      String
+  id_fornecedor  Int
+  codigo_produto String         @unique
+  id_categoria   Int
+  unidade_medida String
+  preco          Float
+  estoque_atual  Float
+  categoria      Categoria      @relation(fields: [id_categoria], references: [id])
+  fornecedor     Fornecedor     @relation(fields: [id_fornecedor], references: [id])
+  data_criacao   DateTime       @default(now())
+  ItemCarrinho   ItemCarrinho[]
 }
-
-
 
 model Vendedor {
   id             Int      @id @default(autoincrement())
@@ -71,18 +73,17 @@ model Vendedor {
   nome           String
   telefone       String?
   endereco       String?
-  dataNascimento DateTime 
-
+  dataNascimento DateTime
 }
 
 model NotaFiscal {
-  id             Int      @id @default(autoincrement())
-  tipoDeNota     String
-  modelo         String  
-  fornecedorId   Int
-  dataEntrada    DateTime @default(now())
-  numeroDaNota   String
-  dataEmissao    DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  tipoDeNota   String
+  modelo       String
+  fornecedorId Int
+  dataEntrada  DateTime @default(now())
+  numeroDaNota String
+  dataEmissao  DateTime @default(now())
 }
 
 model ContagemMensal {
@@ -92,8 +93,7 @@ model ContagemMensal {
   email          String   @unique
   telefone       String?
   endereco       String?
-  dataNascimento DateTime 
-
+  dataNascimento DateTime
 }
 
 model NotaFiscalEntrada {
@@ -103,11 +103,11 @@ model NotaFiscalEntrada {
   email          String   @unique
   telefone       String?
   endereco       String?
-  dataNascimento DateTime 
+  dataNascimento DateTime
 }
 
 model ProdutoSolicitacao {
-  id                  Int @id @default(autoincrement())
+  id                  Int     @id @default(autoincrement())
   solicitacaoCompraId Int
   codigo_produto      String
   quantidade          Int
@@ -126,27 +126,24 @@ model RegistroProduto {
   fornecedor       String
   codigoProduto    String
   dataCadastro     DateTime
-
 }
 
 model SolicitacaoCompra {
-  id         Int @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   clienteId  Int
   vendedorId Int
   ativo      Boolean
-  observacao  String?
+  observacao String?
 }
 
 model Role {
   id   Int    @id @default(autoincrement())
   nome String
-
 }
 
-
 model Item {
-  id            Int       @id @default(autoincrement())
-  codigoProduto String    @unique
+  id            Int    @id @default(autoincrement())
+  codigoProduto String @unique
   nomeProduto   String
   unidadeMedida String
   valorUnitario Float
@@ -159,8 +156,8 @@ model Item {
 }
 
 model FichaTecnica {
-  id             Int      @id @default(autoincrement())
-  codigoProduto String   @unique
+  id            Int    @id @default(autoincrement())
+  codigoProduto String @unique
   nomeProduto   String
   unidadeMedida String
   valorUnitario Float
@@ -171,13 +168,30 @@ model FichaTecnica {
   updatedAt DateTime @updatedAt
 }
 
-
 model Finalizador {
-  id            Int       @id @default(autoincrement())
-  codigo        String
-  nome          String
-  situacao      String
-  grupoReceita  String
-  bandeira      String
-  data_criacao         DateTime  @default(now())
+  id           Int      @id @default(autoincrement())
+  codigo       String
+  nome         String
+  situacao     String
+  grupoReceita String
+  bandeira     String
+  data_criacao DateTime @default(now())
+}
+
+model Carrinho {
+  id        Int            @id @default(autoincrement())
+  cliente   Cliente        @relation(fields: [clienteId], references: [id])
+  usuario   Usuario?       @relation(fields: [usuarioId], references: [id])
+  clienteId Int
+  usuarioId Int?
+  itens     ItemCarrinho[]
+  subtotal  Float
+}
+
+model ItemCarrinho {
+  id         Int        @id @default(autoincrement())
+  produto    Produto    @relation(fields: [produtoId], references: [id])
+  produtoId  Int
+  quantidade Int
+  carrinho   Carrinho[]
 }
