@@ -11,14 +11,6 @@ services:
       - ./src:/app/src
     depends_on:
       - mysql
-      - migration
-  migration:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    command: 'npx prisma migrate dev --name init'
-    depends_on: 
-      - mysql
   mysql:
     container_name: mysql
     image: mysql:latest

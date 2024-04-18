@@ -8,4 +8,4 @@ RUN npm install --quiet --no-optional --no-fund --loglevel=error
 
 RUN npm run build 
 
-CMD [ "npm", "run", "start:dev" ]
+CMD [ "npm", "run", "start:migrate:dev" ]
