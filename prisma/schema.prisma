@@ -9,13 +9,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Role {
+  id   Int    @id @default(autoincrement())
+  nome String
+}
+
+// Entidades relacionadas a Usuários e Clientes
 model Usuario {
   id           Int        @id @default(autoincrement())
   nome         String
   email        String     @unique
   senha        String
-  data_criacao DateTime   @default(now())
-  Carrinho     Carrinho[]
+  dataCriacao  DateTime   @default(now())
+  carrinhos    Carrinho[]
 }
 
 model Cliente {
@@ -25,47 +31,13 @@ model Cliente {
   nome            String
   telefone        String
   endereco        String
-  data_nascimento DateTime
-  data_criacao    DateTime   @default(now())
-  Carrinho        Carrinho[]
+  dataNascimento  DateTime
+  dataCriacao     DateTime   @default(now())
+  carrinhos       Carrinho[]
+  vendas          Venda[]
 }
 
-model Fornecedor {
-  id                 Int       @id @default(autoincrement())
-  nome_fantasia      String
-  cnpj               String    @unique
-  tipo_pessoa        String
-  inscricao_estadual String
-  razao_social       String
-  data_registro      DateTime
-  produtos           Produto[]
-  data_criacao       DateTime  @default(now())
-}
-
-model Categoria {
-  id           Int       @id @default(autoincrement())
-  nome         String
-  data_criacao DateTime  @default(now())
-  produtos     Produto[]
-}
-
-model Produto {
-  id             Int            @id @default(autoincrement())
-  nome           String
-  marca          String
-  descricao      String
-  id_fornecedor  Int
-  codigo_produto String         @unique
-  id_categoria   Int
-  unidade_medida String
-  preco          Float
-  estoque_atual  Float
-  categoria      Categoria      @relation(fields: [id_categoria], references: [id])
-  fornecedor     Fornecedor     @relation(fields: [id_fornecedor], references: [id])
-  data_criacao   DateTime       @default(now())
-  ItemCarrinho   ItemCarrinho[]
-}
-
+// Entidades relacionadas a Vendedores e Vendas
 model Vendedor {
   id             Int      @id @default(autoincrement())
   cpf            String   @unique
@@ -74,45 +46,102 @@ model Vendedor {
   telefone       String?
   endereco       String?
   dataNascimento DateTime
+  vendas         Venda[]
 }
 
-model NotaFiscal {
-  id           Int      @id @default(autoincrement())
-  tipoDeNota   String
-  modelo       String
-  fornecedorId Int
-  dataEntrada  DateTime @default(now())
-  numeroDaNota String
-  dataEmissao  DateTime @default(now())
+model Venda {
+  id         Int       @id @default(autoincrement())
+  clienteId  Int
+  vendedorId Int
+  cliente    Cliente   @relation(fields: [clienteId], references: [id])
+  vendedor   Vendedor  @relation(fields: [vendedorId], references: [id])
+
+  @@unique([clienteId, vendedorId])
 }
 
-model ContagemMensal {
-  id             Int      @id @default(autoincrement())
+// Entidades relacionadas a Produtos e Fornecedores
+model Fornecedor {
+  id                 Int       @id @default(autoincrement())
+  nomeFantasia       String
+  cnpj               String    @unique
+  tipoPessoa         String
+  inscricaoEstadual  String
+  razaoSocial        String
+  dataRegistro       DateTime
+  produtos           Produto[]
+  dataCriacao        DateTime  @default(now())
+}
+
+model Produto {
+  id             Int            @id @default(autoincrement())
   nome           String
-  cpf            String   @unique
-  email          String   @unique
-  telefone       String?
-  endereco       String?
-  dataNascimento DateTime
+  marca          String
+  descricao      String
+  fornecedorId   Int
+  codigoProduto  String         @unique
+  categoriaId    Int
+  unidadeMedida  String
+  preco          Float
+  estoqueAtual   Float
+  categoria      Categoria      @relation(fields: [categoriaId], references: [id])
+  fornecedor     Fornecedor     @relation(fields: [fornecedorId], references: [id])
+  estoque        Estoque[]      
+  dataCriacao    DateTime       @default(now())
+  itensCarrinho  ItemCarrinho[]
 }
 
-model NotaFiscalEntrada {
-  id             Int      @id @default(autoincrement())
-  nome           String
-  cpf            String   @unique
-  email          String   @unique
-  telefone       String?
-  endereco       String?
-  dataNascimento DateTime
+// Entidades relacionadas a Carrinho e Itens do Carrinho
+model Carrinho {
+  id        Int            @id @default(autoincrement())
+  cliente   Cliente        @relation(fields: [clienteId], references: [id])
+  usuario   Usuario?       @relation(fields: [usuarioId], references: [id])
+  clienteId Int
+  usuarioId Int?
+  itens     ItemCarrinho[]
+  subtotal  Float
 }
 
+model ItemCarrinho {
+  id             Int        @id @default(autoincrement())
+  produto        Produto    @relation(fields: [produtoId], references: [id])
+  produtoId      Int
+  quantidade     Int
+  carrinho       Carrinho   @relation(fields: [carrinhoId], references: [id])
+  carrinhoId     Int
+}
+
+// Entidades de produto e estoque
+model Categoria {
+  id           Int       @id @default(autoincrement())
+  nome         String
+  dataCriacao  DateTime  @default(now())
+  produtos     Produto[]
+}
+
+model Estoque {
+  id                Int        @id @default(autoincrement())
+  produtoId         Int       
+  produto           Produto    @relation(fields: [produtoId], references: [id]) 
+  quantidade        Int
+  localizacao       String?   
+  dataValidade      DateTime?  
+  lote              String?    
+  precoCompra       Float?     
+  precoVenda        Float?     
+  fornecedorId      Int?       
+  dataAtualizacao   DateTime   @default(now())
+
+  @@unique([produtoId])
+}
+
+// Entidades de solicitação e registro
 model ProdutoSolicitacao {
   id                  Int     @id @default(autoincrement())
   solicitacaoCompraId Int
-  codigo_produto      String
-  quantidade          Int
-  controle            String?
-  descricao           String?
+  codigoProduto      String
+  quantidade         Int
+  controle           String?
+  descricao          String?
 }
 
 model RegistroProduto {
@@ -128,17 +157,47 @@ model RegistroProduto {
   dataCadastro     DateTime
 }
 
+// Entidade de contagem mensal e produto contado 
+model ContagemMensal {
+  id               Int       @id @default(autoincrement())
+  mes              Int
+  ano              Int
+  localizacao      String?
+  responsavel      String
+  dataHoraContagem DateTime
+  observacoes      String?
+
+  produtos         ProdutoContado[]
+}
+
+model ProdutoContado {
+  id         Int      @id @default(autoincrement())
+  nome       String
+  codigo     String
+  quantidade Float
+  contagem   ContagemMensal @relation(fields: [contagemId], references: [id])
+  contagemId Int
+}
+
+// Entidades de finalizadores
+model Finalizador {
+  id           Int      @id @default(autoincrement())
+  codigo       String
+  nome         String
+  situacao     String
+  grupoReceita String
+  bandeira     String
+  dataCriacao  DateTime @default(now())
+}
+
+// Entidades de compra e notas fiscais
+
 model SolicitacaoCompra {
   id         Int     @id @default(autoincrement())
   clienteId  Int
   vendedorId Int
   ativo      Boolean
   observacao String?
-}
-
-model Role {
-  id   Int    @id @default(autoincrement())
-  nome String
 }
 
 model Item {
@@ -154,44 +213,55 @@ model Item {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-model FichaTecnica {
-  id            Int    @id @default(autoincrement())
-  codigoProduto String @unique
-  nomeProduto   String
-  unidadeMedida String
-  valorUnitario Float
-  quantidade    Int
-  totalUnitario Float
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model NotaFiscalEntrada {
+  id                  Int       @id @default(autoincrement())
+  numeroNota          String    @unique
+  dataEmissao         DateTime
+  serie               String?
+  valorTotal          Float
+  valorImpostos       Float
+  condicoesPagamento  String?
+  prazoEntrega        String?
+  observacoes         String?
+  emitenteId          Int 
+  destinatarioId      Int
+  emitente            Emitente  @relation(fields: [emitenteId], references: [id])
+  destinatario        Destinatario  @relation(fields: [destinatarioId], references: [id])
+  produtos            ProdutoNota[]
 }
 
-model Finalizador {
+model Emitente {
+  id             Int       @id @default(autoincrement())
+  nome           String
+  identificacao  String    @unique 
+  endereco       String
+  notasFiscais   NotaFiscalEntrada[]
+}
+
+model Destinatario {
+  id             Int       @id @default(autoincrement())
+  nome           String
+  identificacao  String    @unique 
+  endereco       String
+  notasFiscais   NotaFiscalEntrada[]
+}
+
+model ProdutoNota {
+  id         Int      @id @default(autoincrement())
+  descricao  String
+  quantidade Float
+  precoUnit  Float
+  total      Float
+  nota       NotaFiscalEntrada @relation(fields: [notaId], references: [id])
+  notaId     Int
+}
+
+model NotaFiscal {
   id           Int      @id @default(autoincrement())
-  codigo       String
-  nome         String
-  situacao     String
-  grupoReceita String
-  bandeira     String
-  data_criacao DateTime @default(now())
-}
-
-model Carrinho {
-  id        Int            @id @default(autoincrement())
-  cliente   Cliente        @relation(fields: [clienteId], references: [id])
-  usuario   Usuario?       @relation(fields: [usuarioId], references: [id])
-  clienteId Int
-  usuarioId Int?
-  itens     ItemCarrinho[]
-  subtotal  Float
-}
-
-model ItemCarrinho {
-  id         Int        @id @default(autoincrement())
-  produto    Produto    @relation(fields: [produtoId], references: [id])
-  produtoId  Int
-  quantidade Int
-  carrinho   Carrinho[]
+  tipoDeNota   String
+  modelo       String
+  fornecedorId Int
+  dataEntrada  DateTime @default(now())
+  numeroDaNota String
+  dataEmissao  DateTime @default(now())
 }

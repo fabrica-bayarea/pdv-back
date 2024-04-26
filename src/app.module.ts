@@ -20,10 +20,12 @@ import { SolicitacaoCompraModule } from './modules/solicitacao_compra/solicitaca
 import { ProdutoSolicitacaoModule } from './modules/produto_solicitacao/produto_solicitacao.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { CarrinhoModule } from './carrinho/carrinho.module';
+import { CarrinhoModule } from './carrinho/carrinho.module';
 
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule,    ConfigModule.forRoot(),  
+  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule,    ConfigModule.forRoot(), CarrinhoModule,  
   ],
   controllers: [AppController],
   providers: [
