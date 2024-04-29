@@ -12,16 +12,19 @@ datasource db {
 model Role {
   id   Int    @id @default(autoincrement())
   nome String
+  usuarios Usuario[]
 }
 
 // Entidades relacionadas a Usuários e Clientes
 model Usuario {
-  id           Int        @id @default(autoincrement())
-  nome         String
-  email        String     @unique
-  senha        String
-  dataCriacao  DateTime   @default(now())
-  carrinhos    Carrinho[]
+ id           Int        @id @default(autoincrement())
+ nome         String
+ email        String     @unique
+ senha        String
+ dataCriacao DateTime   @default(now())
+ carrinhos    Carrinho[]
+ roleId       Int
+ role         Role       @relation(fields: [roleId], references: [id])
 }
 
 model Cliente {
@@ -62,14 +65,14 @@ model Venda {
 // Entidades relacionadas a Produtos e Fornecedores
 model Fornecedor {
   id                 Int       @id @default(autoincrement())
-  nomeFantasia       String
+  nome_fantasia      String
   cnpj               String    @unique
-  tipoPessoa         String
-  inscricaoEstadual  String
-  razaoSocial        String
-  dataRegistro       DateTime
+  tipo_pessoa        String
+  inscricao_estadual String
+  razao_social       String
+  data_registro      DateTime
   produtos           Produto[]
-  dataCriacao        DateTime  @default(now())
+  data_criacao       DateTime  @default(now())
 }
 
 model Produto {
@@ -77,17 +80,17 @@ model Produto {
   nome           String
   marca          String
   descricao      String
-  fornecedorId   Int
-  codigoProduto  String         @unique
-  categoriaId    Int
-  unidadeMedida  String
+  id_fornecedor  Int
+  codigo_produto String         @unique
+  id_categoria   Int
+  unidade_medida String
   preco          Float
-  estoqueAtual   Float
-  categoria      Categoria      @relation(fields: [categoriaId], references: [id])
-  fornecedor     Fornecedor     @relation(fields: [fornecedorId], references: [id])
-  estoque        Estoque[]      
-  dataCriacao    DateTime       @default(now())
-  itensCarrinho  ItemCarrinho[]
+  estoque_atual  Float
+  categoria      Categoria      @relation(fields: [id_categoria], references: [id])
+  fornecedor     Fornecedor     @relation(fields: [id_fornecedor], references: [id])
+  data_criacao   DateTime       @default(now())
+  estoque        Estoque[] 
+  ItemCarrinho   ItemCarrinho[]
 }
 
 // Entidades relacionadas a Carrinho e Itens do Carrinho
@@ -138,10 +141,10 @@ model Estoque {
 model ProdutoSolicitacao {
   id                  Int     @id @default(autoincrement())
   solicitacaoCompraId Int
-  codigoProduto      String
-  quantidade         Int
-  controle           String?
-  descricao          String?
+  codigo_produto      String
+  quantidade          Int
+  controle            String?
+  descricao           String?
 }
 
 model RegistroProduto {
