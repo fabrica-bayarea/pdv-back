@@ -2,10 +2,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { PrismaClient } from '@prisma/client';
+import { RolesGuard } from './modules/auth/jwt.auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalGuards(new RolesGuard());
   if(process.env.NODE_ENV === 'development'){
     const prisma = new PrismaClient();
     try{
