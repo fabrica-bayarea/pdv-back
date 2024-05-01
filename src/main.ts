@@ -10,12 +10,19 @@ async function bootstrap() {
   app.useGlobalGuards(new RolesGuard());
   if(process.env.NODE_ENV === 'development'){
     const prisma = new PrismaClient();
+    // Cria a role de gerente se ela ainda não existir
+    const gerenteRole = await prisma.role.upsert({
+      where: { name: 'GERENTE' },
+      update: {},
+      create: { name: 'GERENTE' },
+    });
     try{
       await prisma.usuario.create({
         data: {
           nome: process.env.NOME_USUARIO,
           email: process.env.EMAIL_USUARIO,
           senha: process.env.SENHA_USUARIO,
+          roleId: gerenteRole.id,
         },
       });
     }catch(err){
