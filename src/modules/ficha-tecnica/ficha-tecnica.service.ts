@@ -1,35 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { FichaTecnica } from '@prisma/client';
+import { FichaTecnicaProduto } from '@prisma/client';
+import { CreateFichaTecnicaProdutoDTO} from './dto/create-ficha-tecnica.dto';
+import { UpdateFichaTecnicaProdutoDTO } from './dto/update-ficha-tecnica.dto';
 
 @Injectable()
 export class FichaTecnicaService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllFichasTecnicas(): Promise<FichaTecnica[]> {
+  async getAllFichasTecnicas(): Promise<FichaTecnicaProduto[]> {
+  
     return this.prisma.fichaTecnica.findMany();
   }
 
-  async getFichaTecnicaById(id: number): Promise<FichaTecnica | null> {
-    return this.prisma.fichaTecnica.findUnique({
+  async getFichaTecnicaById(id: number): Promise<FichaTecnicaProduto | null> {
+
+    const fichaTecnica = await this.prisma.fichaTecnica.findUnique({
       where: { id },
     });
+    if (!fichaTecnica) {
+      throw new NotFoundException('FichaTecnicaProduto not found');
+    }
+    return fichaTecnica;
   }
 
-  async createFichaTecnica(data: FichaTecnica): Promise<FichaTecnica> {
+  async createFichaTecnica(data: CreateFichaTecnicaProdutoDTO): Promise<FichaTecnicaProduto> {
+ 
     return this.prisma.fichaTecnica.create({
       data,
     });
   }
 
-  async updateFichaTecnica(id: number, data: FichaTecnica): Promise<FichaTecnica> {
+  async updateFichaTecnica(id: number, data: UpdateFichaTecnicaProdutoDTO): Promise<FichaTecnicaProduto> {
+    const fichaTecnica = await this.getFichaTecnicaById(id);
+  
     return this.prisma.fichaTecnica.update({
       where: { id },
       data,
     });
   }
 
-  async deleteFichaTecnica(id: number): Promise<FichaTecnica> {
+  async deleteFichaTecnica(id: number): Promise<FichaTecnicaProduto> {
+    const fichaTecnica = await this.getFichaTecnicaById(id);
+
     return this.prisma.fichaTecnica.delete({
       where: { id },
     });

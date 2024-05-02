@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { VendedorService } from './vendedor.service';
 import { Vendedor } from '@prisma/client'; 
+import { CreateVendedorDTO } from './dto/create-vendedor.dto';
 
 @Controller('vendedor') 
 export class VendedorController {
@@ -17,12 +18,12 @@ export class VendedorController {
   }
 
   @Post()
-  async create(@Body() vendedorData: Vendedor): Promise<Vendedor> {
+  async create(@Body() vendedorData: CreateVendedorDTO): Promise<Vendedor> {
     return this.vendedorService.create(vendedorData); 
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() vendedorData: Vendedor): Promise<Vendedor> {
+  async update(@Param('id') id: string, @Body() vendedorData: CreateVendedorDTO): Promise<Vendedor> {
     return this.vendedorService.update(parseInt(id, 10), vendedorData); 
   }
 

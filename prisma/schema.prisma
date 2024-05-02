@@ -20,8 +20,8 @@ model Usuario {
   nome         String
   email        String     @unique
   senha        String
-  dataCriacao  DateTime   @default(now())
-  carrinhos    Carrinho[]
+  data_criacao DateTime   @default(now())
+  Carrinho     Carrinho[]
 }
 
 model Cliente {
@@ -31,22 +31,22 @@ model Cliente {
   nome            String
   telefone        String
   endereco        String
-  dataNascimento  DateTime
-  dataCriacao     DateTime   @default(now())
-  carrinhos       Carrinho[]
+  data_nascimento DateTime
+  data_criacao    DateTime   @default(now())
+  Carrinho        Carrinho[]
   vendas          Venda[]
 }
 
 // Entidades relacionadas a Vendedores e Vendas
 model Vendedor {
-  id             Int      @id @default(autoincrement())
-  cpf            String   @unique
-  email          String   @unique
-  nome           String
-  telefone       String?
-  endereco       String?
-  dataNascimento DateTime
-  vendas         Venda[]
+  id              Int      @id @default(autoincrement())
+  cpf             String   @unique
+  email           String   @unique
+  nome            String
+  telefone        String?
+  endereco        String?
+  data_nascimento DateTime
+  vendas          Venda[]
 }
 
 model Venda {
@@ -61,34 +61,53 @@ model Venda {
 
 // Entidades relacionadas a Produtos e Fornecedores
 model Fornecedor {
-  id                 Int       @id @default(autoincrement())
-  nomeFantasia       String
-  cnpj               String    @unique
-  tipoPessoa         String
-  inscricaoEstadual  String
-  razaoSocial        String
-  dataRegistro       DateTime
-  produtos           Produto[]
-  dataCriacao        DateTime  @default(now())
+  id                  Int       @id @default(autoincrement())
+  nome_fantasia       String
+  cnpj                String    @unique
+  tipo_pessoa         String
+  inscricao_estadual  String
+  razao_social        String
+  data_registro       DateTime
+  produtos            Produto[]   // Relação com Produto
+  data_criacao        DateTime  @default(now())
 }
 
 model Produto {
-  id             Int            @id @default(autoincrement())
-  nome           String
-  marca          String
-  descricao      String
-  fornecedorId   Int
-  codigoProduto  String         @unique
-  categoriaId    Int
-  unidadeMedida  String
-  preco          Float
-  estoqueAtual   Float
-  categoria      Categoria      @relation(fields: [categoriaId], references: [id])
-  fornecedor     Fornecedor     @relation(fields: [fornecedorId], references: [id])
-  estoque        Estoque[]      
-  dataCriacao    DateTime       @default(now())
-  itensCarrinho  ItemCarrinho[]
+  id               Int            @id @default(autoincrement())
+  nome             String
+  marca            String
+  descricao        String
+  id_fornecedor    Int
+  codigo_produto   String         @unique
+  id_categoria     Int
+  unidade_medida   String
+  preco            Float
+  estoque_atual    Float
+  categoria        Categoria      @relation(fields: [id_categoria], references: [id])
+  fornecedor       Fornecedor     @relation(fields: [id_fornecedor], references: [id])
+  estoque          Estoque[]      
+  data_criacao     DateTime       @default(now())
+  itensCarrinho    ItemCarrinho[]
+  ficha_tecnica    FichaTecnicaProduto?
 }
+
+model FichaTecnicaProduto {
+  id               Int      @id @default(autoincrement())
+  dimensoes        String?
+  peso             String?
+  material         String?
+  outras_especificacoes String?
+  caracteristicas  String
+  funcionalidades  String
+  instrucoes_uso   String
+  manutencao       String
+  certificacoes    String
+  data_elaboracao  DateTime @default(now())
+
+  produto          Produto  @relation(fields: [produtoId], references: [id])
+  produtoId        Int      @unique
+}
+
 
 // Entidades relacionadas a Carrinho e Itens do Carrinho
 model Carrinho {
@@ -114,7 +133,7 @@ model ItemCarrinho {
 model Categoria {
   id           Int       @id @default(autoincrement())
   nome         String
-  dataCriacao  DateTime  @default(now())
+  data_criacao DateTime  @default(now())
   produtos     Produto[]
 }
 
@@ -128,7 +147,7 @@ model Estoque {
   lote              String?    
   precoCompra       Float?     
   precoVenda        Float?     
-  fornecedorId      Int?       
+  id_fornecedor     Int?       
   dataAtualizacao   DateTime   @default(now())
 
   @@unique([produtoId])
@@ -138,10 +157,10 @@ model Estoque {
 model ProdutoSolicitacao {
   id                  Int     @id @default(autoincrement())
   solicitacaoCompraId Int
-  codigoProduto      String
-  quantidade         Int
-  controle           String?
-  descricao          String?
+  codigo_produto      String
+  quantidade          Int
+  controle            String?
+  descricao           String?
 }
 
 model RegistroProduto {
@@ -149,11 +168,11 @@ model RegistroProduto {
   nome             String
   descricaoProduto String
   marca            String
-  unidadeMedida    String
-  estoqueAtual     String
+  unidade_medida   String
+  estoque_atual    String
   preco            Float
   fornecedor       String
-  codigoProduto    String
+  codigo_produto   String
   dataCadastro     DateTime
 }
 
@@ -171,7 +190,7 @@ model ContagemMensal {
 }
 
 model ProdutoContado {
-  id         Int      @id @default(autoincrement())
+  id         Int            @id @default(autoincrement())
   nome       String
   codigo     String
   quantidade Float
@@ -187,7 +206,7 @@ model Finalizador {
   situacao     String
   grupoReceita String
   bandeira     String
-  dataCriacao  DateTime @default(now())
+  data_criacao DateTime @default(now())
 }
 
 // Entidades de compra e notas fiscais
@@ -201,14 +220,14 @@ model SolicitacaoCompra {
 }
 
 model Item {
-  id            Int    @id @default(autoincrement())
-  codigoProduto String @unique
-  nomeProduto   String
-  unidadeMedida String
-  valorUnitario Float
-  grupoItem     String
-  grupoDespesa  String
-  despesa       String
+  id             Int    @id @default(autoincrement())
+  codigo_produto String @unique
+  nomeProduto    String
+  unidade_medida String
+  valorUnitario  Float
+  grupoItem      String
+  grupoDespesa   String
+  despesa        String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -257,11 +276,11 @@ model ProdutoNota {
 }
 
 model NotaFiscal {
-  id           Int      @id @default(autoincrement())
-  tipoDeNota   String
-  modelo       String
-  fornecedorId Int
-  dataEntrada  DateTime @default(now())
-  numeroDaNota String
-  dataEmissao  DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  tipoDeNota    String
+  modelo        String
+  id_fornecedor Int
+  dataEntrada   DateTime @default(now())
+  numeroDaNota  String
+  dataEmissao   DateTime @default(now())
 }

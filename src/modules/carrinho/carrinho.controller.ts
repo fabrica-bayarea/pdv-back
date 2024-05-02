@@ -1,34 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
 import { CarrinhoService } from './carrinho.service';
-import { CreateCarrinhoDto } from './dto/create-carrinho.dto';
-import { UpdateCarrinhoDto } from './dto/update-carrinho.dto';
+import { Cliente } from '@prisma/client';
+import { UpdateCarrinhoDTO} from './dto/update-carrinho.dto';
+import { CreateCarrinhoDTO } from './dto/create-carrinho.dto';
+import { ClienteService } from '../cliente/cliente.service';
 
 @Controller('carrinho')
 export class CarrinhoController {
-  constructor(private readonly carrinhoService: CarrinhoService) {}
+  constructor(
+    private readonly carrinhoService: CarrinhoService,
+    private readonly clienteService: ClienteService,
+  ) {}
+
+  @Get(':idCliente')
+  async findAllByCliente(@Param('idCliente') idCliente: number): Promise<any> {
+    const cliente: Cliente = await this.clienteService.findOne(idCliente);
+    if (!cliente) {
+      throw new NotFoundException('Cliente não encontrado');
+    }
+    return this.carrinhoService.findAllByCliente(cliente); 
+  }
 
   @Post()
-  create(@Body() createCarrinhoDto: CreateCarrinhoDto) {
+  async create(@Body() createCarrinhoDto: CreateCarrinhoDTO): Promise<any> {
     return this.carrinhoService.create(createCarrinhoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.carrinhoService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.carrinhoService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCarrinhoDto: UpdateCarrinhoDto) {
-    return this.carrinhoService.update(+id, updateCarrinhoDto);
+  @Put(':id')
+  async update(@Param('id') id: number, @Body() updateCarrinhoDto: UpdateCarrinhoDTO): Promise<any> {
+    return this.carrinhoService.update(id, updateCarrinhoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.carrinhoService.remove(+id);
+  async remove(@Param('id') id: number): Promise<any> {
+    return this.carrinhoService.remove(id);
   }
 }
+
+export { CarrinhoService };

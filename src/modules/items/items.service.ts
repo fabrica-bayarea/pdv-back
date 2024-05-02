@@ -9,7 +9,20 @@ const prisma = new PrismaClient();
 @Injectable()
 export class ItemsService {
   async create(itemDto: CreateItemDto): Promise<Item> {
-    return prisma.item.create({ data: itemDto });
+
+    const item: Item = {
+      codigo_produto: itemDto.codigoProduto,
+      nomeProduto: itemDto.nomeProduto,
+      unidade_medida: itemDto.unidadeMedida,
+      valorUnitario: itemDto.valorUnitario,
+      grupoItem: itemDto.grupoItem,
+      grupoDespesa: itemDto.grupoDespesa,
+      despesa: itemDto.despesa,
+      id: undefined,
+      createdAt: undefined,
+      updatedAt: undefined
+    };
+    return prisma.item.create({ data: item });
   }
 
   async findAll(): Promise<Item[]> {

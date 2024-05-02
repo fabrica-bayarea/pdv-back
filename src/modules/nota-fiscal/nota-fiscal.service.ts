@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateNotaFiscalDTO } from './dto/create-nota-fiscal.dto';
+import { NotaFiscal } from '@prisma/client';
 
 @Injectable()
 export class NotaFiscalService {
@@ -26,26 +28,40 @@ export class NotaFiscalService {
     return notaFiscal;
   }
 
-  async createNotaFiscal(data: any) {
-    if (data.fornecedorId) {
-      data.fornecedorId = Number(data.fornecedorId);
+  async createNotaFiscal(data: CreateNotaFiscalDTO) {
+    if (!data || typeof data !== 'object') {
+      throw new NotFoundException('Dados inválidos para criação de nota fiscal.');
     }
+
+    const notaFiscal: NotaFiscal = {
+      tipoDeNota: '',
+      modelo: '',
+      id_fornecedor: data.fornecedorId,
+      numeroDaNota: '',
+      id: undefined,
+      dataEntrada: undefined,
+      dataEmissao: undefined
+    };
+
     if (data.dataEntrada) {
       var partesTexto = data.dataEntrada.split('/');
-      data.dataEntrada = new Date(`${partesTexto[2]}-${partesTexto[1]}-${partesTexto[0]}`).toISOString();
+      notaFiscal.dataEntrada = new Date(`${partesTexto[2]}-${partesTexto[1]}-${partesTexto[0]}`);
+      // .toISOString();
     }
+
     if (data.dataEmissao) {
       var partesTexto = data.dataEmissao.split('/');
-      data.dataEmissao = new Date(`${partesTexto[2]}-${partesTexto[1]}-${partesTexto[0]}`).toISOString();
+      notaFiscal.dataEmissao = new Date(`${partesTexto[2]}-${partesTexto[1]}-${partesTexto[0]}`);
+      // .toISOString();
     }
 
     return this.prisma.notaFiscal.create({
-      data,
+      data: notaFiscal,
     });
   }
 
-  async updateNotaFiscal(id: number, data: any) {
-    if (!id || typeof id !== 'number') {
+  async updateNotaFiscal(id: number, data: CreateNotaFiscalDTO) {
+      if (!id || typeof id !== 'number') {
       throw new NotFoundException('ID inválido!');
     }
 
@@ -57,12 +73,9 @@ export class NotaFiscalService {
       throw new NotFoundException('Nota fiscal não encontrada.');
     }
 
-    data.id = id;
-    data.dataEmissao = existingNotaFiscal.dataEmissao;
-    data.dataEntrada = existingNotaFiscal.dataEntrada;
-    // if (data.dataEmissao) {
-    //   throw new Error('Data de emissão não pode ser atualizada!');
-    // }
+    // data.id = id;
+    // data.dataEmissao = existingNotaFiscal.dataEmissao;
+    // data.dataEntrada = existingNotaFiscal.dataEntrada;
 
     return this.prisma.notaFiscal.update({
       where: { id },

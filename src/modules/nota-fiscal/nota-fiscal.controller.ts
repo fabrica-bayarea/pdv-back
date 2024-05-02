@@ -1,9 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
 import { NotaFiscalService } from './nota-fiscal.service';
-import { NotaFiscal } from '@prisma/client';
+import { NotaFiscal, Prisma } from '@prisma/client';
+import { CreateNotaFiscalDTO } from './dto/create-nota-fiscal.dto';
+
 
 @Controller('nota-fiscal')
 export class NotaFiscalController {
+  prisma: any;
   constructor(private readonly notaFiscalService: NotaFiscalService) {}
 
   @Get()
@@ -21,17 +24,16 @@ export class NotaFiscalController {
   }
 
   @Post()
-  async create(@Body() notaFiscalData: NotaFiscal): Promise<NotaFiscal> {
+  async create(@Body() notaFiscalData: CreateNotaFiscalDTO): Promise<NotaFiscal> {
     return this.notaFiscalService.createNotaFiscal(notaFiscalData);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() notaFiscalData: NotaFiscal): Promise<NotaFiscal> {
-    try {
-      return await this.notaFiscalService.updateNotaFiscal(parseInt(id, 10), notaFiscalData);
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
+  async update(id: number, data: Prisma.NotaFiscalUpdateInput): Promise<NotaFiscal> {
+    return this.prisma.notaFiscal.update({
+      where: { id },
+      data,
+    });
   }
 
   @Delete(':id')

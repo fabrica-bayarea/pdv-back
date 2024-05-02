@@ -1,26 +1,63 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCarrinhoDto } from './dto/create-carrinho.dto';
-import { UpdateCarrinhoDto } from './dto/update-carrinho.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Carrinho } from '.prisma/client';
+import { CreateCarrinhoDTO } from './dto/create-carrinho.dto';
+import { UpdateCarrinhoDTO } from './dto/update-carrinho.dto';
+import { Cliente } from '@prisma/client';
 
 @Injectable()
 export class CarrinhoService {
-  create(createCarrinhoDto: CreateCarrinhoDto) {
-    return 'This action adds a new carrinho';
+ 
+  findAllByCliente(cliente: Cliente): any {
+    throw new Error('Method not implemented.');
+  }
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findAll(): Promise<Carrinho[]> {
+    return await this.prisma.carrinho.findMany();
   }
 
-  findAll() {
-    return `This action returns all carrinho`;
+  async findById(id: number): Promise<Carrinho> {
+    const carrinho = await this.prisma.carrinho.findUnique({ where: { id } });
+    if (!carrinho) {
+      throw new NotFoundException('Carrinho não encontrado');
+    }
+    return carrinho;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} carrinho`;
+  async create(createCarrinhoDto: CreateCarrinhoDTO): Promise<Carrinho> {
+
+    const clienteExists = await this.prisma.cliente.findUnique({
+      where: { id: createCarrinhoDto.clienteId },
+    });
+    if (!clienteExists) {
+      throw new NotFoundException('Cliente não encontrado');
+    }
+
+    return await this.prisma.carrinho.create({
+      data: {
+        clienteId: createCarrinhoDto.clienteId,
+        usuarioId: createCarrinhoDto.usuarioId,
+        subtotal: createCarrinhoDto.subtotal,
+      },
+    });
   }
 
-  update(id: number, updateCarrinhoDto: UpdateCarrinhoDto) {
-    return `This action updates a #${id} carrinho`;
+  async update(id: number, updateCarrinhoDto: UpdateCarrinhoDTO): Promise<Carrinho> {
+    const carrinho = await this.findById(id);
+
+    return await this.prisma.carrinho.update({
+      where: { id },
+      data: {
+        clienteId: updateCarrinhoDto.clienteId,
+        usuarioId: updateCarrinhoDto.usuarioId,
+        subtotal: updateCarrinhoDto.subtotal,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} carrinho`;
+  async remove(id: number): Promise<void> {
+    const carrinho = await this.findById(id);
+    await this.prisma.carrinho.delete({ where: { id } });
   }
 }
