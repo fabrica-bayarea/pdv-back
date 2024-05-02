@@ -19,11 +19,11 @@ import { ClienteModule } from './modules/cliente/cliente.module';
 import { SolicitacaoCompraModule } from './modules/solicitacao_compra/solicitacao_compra.module';
 import { ProdutoSolicitacaoModule } from './modules/produto_solicitacao/produto_solicitacao.module';
 import { ConfigModule } from '@nestjs/config';
-import { CarrinhoModule } from './modules/carrinho/carrinho.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CarrinhoModule } from './modules/carrinho/carrinho.module';
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule,    ConfigModule.forRoot(), CarrinhoModule,  
+  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule, ConfigModule.forRoot(), CarrinhoModule
   ],
   controllers: [AppController],
   providers: [
