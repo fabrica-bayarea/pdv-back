@@ -164,6 +164,10 @@ model ProdutoSolicitacao {
   quantidade          Int
   controle            String?
   descricao           String?
+  codigo_produto      String
+  quantidade          Int
+  controle            String?
+  descricao           String?
 }
 
 model RegistroProduto {
