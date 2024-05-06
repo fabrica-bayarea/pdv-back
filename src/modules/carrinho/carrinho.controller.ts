@@ -13,13 +13,13 @@ export class CarrinhoController {
   ) {}
 
   @Get(':idCliente')
-  async findAllByCliente(@Param('idCliente') idCliente: number): Promise<any> {
-    const cliente: Cliente = await this.clienteService.findOne(idCliente);
-    if (!cliente) {
-      throw new NotFoundException('Cliente não encontrado');
-    }
-    return this.carrinhoService.findAllByCliente(cliente); 
+async findAllByCliente(@Param('idCliente') idCliente: number): Promise<any> {
+  const cliente: Cliente = await this.clienteService.findOne(idCliente);
+  if (!cliente) {
+    throw new NotFoundException('Cliente não encontrado');
   }
+  return this.carrinhoService.findAllByCliente(cliente.id);
+}
 
   @Post()
   async create(@Body() createCarrinhoDto: CreateCarrinhoDTO): Promise<any> {

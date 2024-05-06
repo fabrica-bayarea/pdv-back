@@ -35,6 +35,7 @@ model Cliente {
   data_criacao    DateTime   @default(now())
   Carrinho        Carrinho[]
   vendas          Venda[]
+  enderecos       Endereco[]  @relation("EnderecoCliente")
 }
 
 // Entidades relacionadas a Vendedores e Vendas
@@ -109,15 +110,22 @@ model FichaTecnicaProduto {
 }
 
 
-// Entidades relacionadas a Carrinho e Itens do Carrinho
+// Entidades relacionadas a Carrinho
 model Carrinho {
-  id        Int            @id @default(autoincrement())
-  cliente   Cliente        @relation(fields: [clienteId], references: [id])
-  usuario   Usuario?       @relation(fields: [usuarioId], references: [id])
-  clienteId Int
-  usuarioId Int?
-  itens     ItemCarrinho[]
-  subtotal  Float
+  id               Int             @id @default(autoincrement())
+  cliente          Cliente         @relation(fields: [clienteId], references: [id])
+  usuario          Usuario?        @relation(fields: [usuarioId], references: [id])
+  clienteId        Int
+  usuarioId        Int?
+  itens            ItemCarrinho[]
+  descontos        Desconto[]
+  total            Float
+  impostos         Float?
+  metodoPagamento  MetodoPagamento?  @relation(fields: [metodoPagamentoId], references: [id])
+  metodoPagamentoId  Int?
+  enderecoEntrega  EnderecoEntrega? @relation(fields: [enderecoEntregaId], references: [id])
+  enderecoEntregaId Int?
+  createdAt        DateTime        @default(now())
 }
 
 model ItemCarrinho {
@@ -127,6 +135,41 @@ model ItemCarrinho {
   quantidade     Int
   carrinho       Carrinho   @relation(fields: [carrinhoId], references: [id])
   carrinhoId     Int
+}
+
+model Desconto {
+  id            Int         @id @default(autoincrement())
+  carrinho      Carrinho    @relation(fields: [carrinhoId], references: [id])
+  carrinhoId    Int
+  valor         Float       
+  motivo        String      
+}
+
+model MetodoPagamento {
+  id              Int         @id @default(autoincrement())
+  tipo            String
+  carrinhos       Carrinho[]  
+}
+
+model Endereco {
+  id             Int         @id @default(autoincrement())
+  rua            String
+  cidade         String
+  estado         String
+  pais           String
+  cep            String
+  cliente        Cliente     @relation("EnderecoCliente", fields: [clienteId], references: [id])
+  clienteId      Int
+}
+
+model EnderecoEntrega {
+  id       Int      @id @default(autoincrement())
+  rua      String
+  cidade   String
+  estado   String
+  pais     String
+  cep      String
+  carrinho Carrinho[]
 }
 
 // Entidades de produto e estoque

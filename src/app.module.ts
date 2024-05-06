@@ -13,7 +13,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { ContagemMensalModule } from './modules/contagem-mensal/contagem-mensal.module';
 import { NotaFiscalEntradaModule } from './modules/nota-fiscal-entrada/nota-fiscal-entrada.module';
-import { ItemModule } from './modules/items/items.module';
+import { ItemModule } from './modules/itens-de-estoque/items.module';
 import { FinalizadorModule } from './modules/finalizador/finalizador.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
 import { SolicitacaoCompraModule } from './modules/solicitacao_compra/solicitacao_compra.module';

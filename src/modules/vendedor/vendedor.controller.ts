@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { VendedorService } from './vendedor.service';
 import { Vendedor } from '@prisma/client'; 
 import { CreateVendedorDTO } from './dto/create-vendedor.dto';
+import { VendedorService } from '../vendedor/vendedor.service';
 
 @Controller('vendedor') 
 export class VendedorController {

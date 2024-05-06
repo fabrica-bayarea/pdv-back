@@ -67,4 +67,4 @@ export class CreateFichaTecnicaProdutoDTO {
     this.certificacoes = data.certificacoes;
     this.dataElaboracao = data.dataElaboracao;
   }
-}
+} 
