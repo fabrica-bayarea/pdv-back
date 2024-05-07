@@ -11,7 +11,8 @@ datasource db {
 
 model Role {
   id   Int    @id @default(autoincrement())
-  nome String
+  nome String @unique
+  usuarios Usuario[]
 }
 
 // Entidades relacionadas a Usuários e Clientes
@@ -22,6 +23,8 @@ model Usuario {
   senha        String
   data_criacao DateTime   @default(now())
   Carrinho     Carrinho[]
+  roleId       Int
+  role         Role     @relation(fields: [roleId], references: [id])
 }
 
 model Cliente {
