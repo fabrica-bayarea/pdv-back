@@ -12,8 +12,13 @@ import {
 import { ProdutoService } from './produto.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from '../enums/role.enum';
+import { UseGuards } from '@nestjs/common';
 
 @Controller('produto')
+@UseGuards(JwtAuthGuard)
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
 
@@ -25,12 +30,14 @@ export class ProdutoController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.GERENTE)
   findAll() {
     return this.produtoService.findAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.VENDEDOR)
   findOne(@Param('id') id: string) {
     return this.produtoService.findOne(+id);
   }
@@ -47,3 +54,4 @@ export class ProdutoController {
     return this.produtoService.remove(+id);
   }
 }
+

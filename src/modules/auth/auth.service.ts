@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsuarioDto } from '../usuario/dto/usuario.dto';
 import { UsuarioService } from './../usuario/usuario.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { RoleUtils } from '../enums/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -12,8 +13,12 @@ export class AuthService {
     ){}
     async login(usr: UsuarioDto) {
         const usuario = await this.validarUsuario(usr.email, usr.senha);
-        const payload = { id:usuario.id, nome: usuario.nome, email: usuario.email, role: usuario.role};
-        console.log(this.jwtService)
+         // Usa a classe RoleUtils para encontrar o nome da role baseado no roleId
+        const role = RoleUtils.findEnum(usuario.roleId);
+
+        const payload = { id:usuario.id, nome: usuario.nome, email: usuario.email, role: role};
+        console.log(payload);
+        //console.log(this.jwtService)
         return {
             access_token: this.jwtService.sign(payload),
         };
