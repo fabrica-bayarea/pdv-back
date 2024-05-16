@@ -12,7 +12,7 @@ export class AuthService {
         private jwtService: JwtService
     ){}
     async login(usr: UsuarioDto) {
-        const usuario = await this.validarUsuario(usr.email, usr.senha);d
+        const usuario = await this.validarUsuario(usr.email, usr.senha);
         const role = RoleUtils.findEnum(usuario.roleId);
 
         const payload = { id:usuario.id, nome: usuario.nome, email: usuario.email, role: role};

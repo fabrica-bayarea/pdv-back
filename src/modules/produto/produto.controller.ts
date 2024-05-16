@@ -24,6 +24,7 @@ export class ProdutoController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Roles(Role.GERENTE)
   create(@Body() createProdutoDto: CreateProdutoDto) {
     return this.produtoService.create(createProdutoDto);
   }
@@ -44,12 +45,14 @@ export class ProdutoController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.GERENTE)
   update(@Param('id') id: string, @Body() updateProdutoDto: UpdateProdutoDto) {
     return this.produtoService.update(+id, updateProdutoDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles(Role.GERENTE)
   remove(@Param('id') id: string) {
     return this.produtoService.remove(+id);
   }

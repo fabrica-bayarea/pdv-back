@@ -12,31 +12,40 @@ import {
 import { FornecedorService } from './fornecedor.service';
 import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
 import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from '../enums/role.enum';
+import { UseGuards } from '@nestjs/common';
 
 @Controller('fornecedor')
+@UseGuards(JwtAuthGuard)
 export class FornecedorController {
   constructor(private readonly fornecedorService: FornecedorService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Roles(Role.GERENTE)
   create(@Body() createFornecedorDto: CreateFornecedorDto) {
     return this.fornecedorService.create(createFornecedorDto);
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.GERENTE)
   findAll() {
     return this.fornecedorService.findAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.GERENTE)
   findOne(@Param('id') id: string) {
     return this.fornecedorService.findOne(+id);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.GERENTE)
   update(
     @Param('id') id: string,
     @Body() updateFornecedorDto: UpdateFornecedorDto,
@@ -45,6 +54,7 @@ export class FornecedorController {
   }
 
   @Delete(':id')
+  @Roles(Role.GERENTE)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string) {
     return await this.fornecedorService.remove(+id);
