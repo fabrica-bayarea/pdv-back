@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Inject } from '@nestjs/common';
 import { Role } from '../enums/role.enum';
 import { ROLES_KEY } from 'src/decorators/roles.decorator';
 
@@ -13,15 +12,16 @@ export class JwtAuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    console.log(requiredRoles);
+    console.log("Role:",requiredRoles);
+    //Role está sendo indentificada com sucesso
     if (!requiredRoles) {
       return true;
     }
-    console.log('Context:', context);
     const { user } = context.switchToHttp().getRequest();
     console.log('User:', user);
+    // Usuário está vindo como undefined
     if (!user) {
-      return false; // Negar acesso se não houver usuário ou roles definidas
+      return false;
     }
     return user.role === requiredRoles;
   }
