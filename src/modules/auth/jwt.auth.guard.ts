@@ -1,7 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../enums/role.enum';
+import { Role, RoleUtils } from '../enums/role.enum';
 import { ROLES_KEY } from 'src/decorators/roles.decorator';
+import * as jwt from 'jsonwebtoken';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -12,17 +14,32 @@ export class JwtAuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    console.log("Role:",requiredRoles);
-    //Role está sendo indentificada com sucesso
     if (!requiredRoles) {
       return true;
     }
-    const { user } = context.switchToHttp().getRequest();
-    console.log('User:', user);
-    // Usuário está vindo como undefined
-    if (!user) {
-      return false;
+    console.log(requiredRoles);
+    if (!requiredRoles) {
+      return true;
     }
-    return user.role === requiredRoles;
+    const request = context.switchToHttp().getRequest();
+    const { headers } = request;
+    const headerString = headers.authorization.split(' ');
+    const token = headerString[1];
+
+    // Agora, como decodeToken é um método da classe, você não precisa usar 'this'
+    const user = this.decodeToken(token, process.env.JWT_SECRET_KEY);
+
+    return user.role == requiredRoles
+  }
+
+  // Corrigido para ser um método da classe
+  decodeToken(token: string, secretKey: string): any {
+    try {
+      const decoded = jwt.verify(token, secretKey);
+      return decoded;
+    } catch (err) {
+      console.error('Erro ao decodificar o token:', err);
+      throw new Error('Token inválido');
+    }
   }
 }
