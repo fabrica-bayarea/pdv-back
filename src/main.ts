@@ -30,7 +30,7 @@ async function bootstrap() {
           nome: nomeUsuario,
           email: emailUsuario,
           senha: senhaCriptografada, // Usa a senha criptografada
-          roleId: gerenteRole.id, // Supondo que gerenteRole.id esteja definido
+          roleId: gerenteRole.id, 
         },
       }); 
     }catch(err){

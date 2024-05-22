@@ -4,6 +4,7 @@ import { Role, RoleUtils } from '../enums/role.enum';
 import { ROLES_KEY } from 'src/decorators/roles.decorator';
 import * as jwt from 'jsonwebtoken';
 import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -26,20 +27,25 @@ export class JwtAuthGuard implements CanActivate {
     const headerString = headers.authorization.split(' ');
     const token = headerString[1];
 
-    // Agora, como decodeToken é um método da classe, você não precisa usar 'this'
     const user = this.decodeToken(token, process.env.JWT_SECRET_KEY);
 
-    return user.role == requiredRoles
+    // Comparação direta entre o papel requerido e o papel do usuário
+    if (user.role !== requiredRoles) {
+      const roleUser = RoleUtils.getStringById(user.role);
+      // Lança uma exceção de não autorizado se a comparação falhar
+      throw new UnauthorizedException(`Usuário com role ${roleUser} não autorizado para acessar esta rota`);
+    }
+
+    return true; // Se a comparação for bem-sucedida, permite o acesso
   }
 
-  // Corrigido para ser um método da classe
   decodeToken(token: string, secretKey: string): any {
     try {
       const decoded = jwt.verify(token, secretKey);
       return decoded;
     } catch (err) {
-      console.error('Erro ao decodificar o token:', err);
-      throw new Error('Token inválido');
+      //console.error('Erro ao decodificar o token:', err);
+      throw new BadRequestException('Token inválido');
     }
   }
 }
