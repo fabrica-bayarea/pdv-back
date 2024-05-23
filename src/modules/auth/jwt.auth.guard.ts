@@ -23,13 +23,13 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const { headers } = request;
 
-    // Verifique se o header de autorização está presente
+    // Verifica se o header de autorização está presente
     if (!headers.authorization) {
       throw new BadRequestException('Header de autorização ausente');
     }
     const headerString = headers.authorization.split(' ');
     
-    // Verifique se o header de autorização está no formato correto
+    // Verifica se o header de autorização está no formato correto
     if (headerString.length !== 2 || headerString[0] !== 'Bearer') {
       throw new BadRequestException('Formato de header de autorização inválido');
     }
@@ -37,7 +37,7 @@ export class JwtAuthGuard implements CanActivate {
 
     const user = this.decodeToken(token, process.env.JWT_SECRET_KEY);
 
-    // Supondo que RoleUtils.getStringById é uma função que retorna o nome do role baseado no ID
+    //Função que retorna o nome do role baseado no ID
     const roleUser = RoleUtils.getStringById(user.role);
 
     // Itera sobre os requiredRoles para verificar se algum deles corresponde ao role do usuário
@@ -48,8 +48,7 @@ export class JwtAuthGuard implements CanActivate {
 
     return true; // Se a comparação for bem-sucedida, permite o acesso
   }
-
-  // Corrigido para ser um método da classe
+  
   decodeToken(token: string, secretKey: string): any {
     try {
       const decoded = jwt.verify(token, secretKey);
