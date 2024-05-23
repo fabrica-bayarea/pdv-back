@@ -24,28 +24,28 @@ export class FornecedorController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE,Role.ESTOQUE)
   create(@Body() createFornecedorDto: CreateFornecedorDto) {
     return this.fornecedorService.create(createFornecedorDto);
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE,Role.ESTOQUE)
   findAll() {
     return this.fornecedorService.findAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE,Role.ESTOQUE)
   findOne(@Param('id') id: string) {
     return this.fornecedorService.findOne(+id);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE,Role.ESTOQUE)
   update(
     @Param('id') id: string,
     @Body() updateFornecedorDto: UpdateFornecedorDto,
@@ -54,7 +54,7 @@ export class FornecedorController {
   }
 
   @Delete(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE,Role.ESTOQUE)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string) {
     return await this.fornecedorService.remove(+id);

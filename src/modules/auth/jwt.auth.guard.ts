@@ -15,28 +15,32 @@ export class JwtAuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (!requiredRoles) {
-      return true;
-    }
     console.log(requiredRoles);
     if (!requiredRoles) {
       return true;
     }
     const request = context.switchToHttp().getRequest();
-    const { headers } = request;
-    const headerString = headers.authorization.split(' ');
-    const token = headerString[1];
+    try {
+      const { headers } = request;
+      const headerString = headers.authorization.split(' ');
+  
+      const token = headerString[1];
+      const user = this.decodeToken(token, process.env.JWT_SECRET_KEY);
 
-    const user = this.decodeToken(token, process.env.JWT_SECRET_KEY);
-
-    // Comparação direta entre o papel requerido e o papel do usuário
-    if (user.role !== requiredRoles) {
+      //função que retorna o nome do role baseado no ID
       const roleUser = RoleUtils.getStringById(user.role);
-      // Lança uma exceção de não autorizado se a comparação falhar
+
+      // Itera sobre os requiredRoles para verificar se algum deles corresponde ao role do usuário
+      if (!requiredRoles.some(requiredRole => requiredRole === user.role)) {
+      // Lança uma exceção de não autorizado se nenhum dos requiredRoles corresponder ao role do usuário
       throw new UnauthorizedException(`Usuário com role ${roleUser} não autorizado para acessar esta rota`);
+      }
+  
+    } catch (error) {
+      throw new BadRequestException('Erro ao verificar as permissões do usuário.');
     }
 
-    return true; // Se a comparação for bem-sucedida, permite o acesso
+    return true; 
   }
 
   decodeToken(token: string, secretKey: string): any {
