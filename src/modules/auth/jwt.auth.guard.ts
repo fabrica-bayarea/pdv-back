@@ -19,30 +19,37 @@ export class JwtAuthGuard implements CanActivate {
     if (!requiredRoles) {
       return true;
     }
+
     const request = context.switchToHttp().getRequest();
-    try {
-      const { headers } = request;
-      const headerString = headers.authorization.split(' ');
-  
-      const token = headerString[1];
-      const user = this.decodeToken(token, process.env.JWT_SECRET_KEY);
+    const { headers } = request;
 
-      //função que retorna o nome do role baseado no ID
-      const roleUser = RoleUtils.getStringById(user.role);
+    // Verifique se o header de autorização está presente
+    if (!headers.authorization) {
+      throw new BadRequestException('Header de autorização ausente');
+    }
+    const headerString = headers.authorization.split(' ');
+    
+    // Verifique se o header de autorização está no formato correto
+    if (headerString.length !== 2 || headerString[0] !== 'Bearer') {
+      throw new BadRequestException('Formato de header de autorização inválido');
+    }
+    const token = headerString[1];
 
-      // Itera sobre os requiredRoles para verificar se algum deles corresponde ao role do usuário
-      if (!requiredRoles.some(requiredRole => requiredRole === user.role)) {
+    const user = this.decodeToken(token, process.env.JWT_SECRET_KEY);
+
+    // Supondo que RoleUtils.getStringById é uma função que retorna o nome do role baseado no ID
+    const roleUser = RoleUtils.getStringById(user.role);
+
+    // Itera sobre os requiredRoles para verificar se algum deles corresponde ao role do usuário
+    if (!requiredRoles.some(requiredRole => requiredRole === user.role)) {
       // Lança uma exceção de não autorizado se nenhum dos requiredRoles corresponder ao role do usuário
       throw new UnauthorizedException(`Usuário com role ${roleUser} não autorizado para acessar esta rota`);
-      }
-  
-    } catch (error) {
-      throw new BadRequestException('Erro ao verificar as permissões do usuário.');
     }
 
-    return true; 
+    return true; // Se a comparação for bem-sucedida, permite o acesso
   }
 
+  // Corrigido para ser um método da classe
   decodeToken(token: string, secretKey: string): any {
     try {
       const decoded = jwt.verify(token, secretKey);
