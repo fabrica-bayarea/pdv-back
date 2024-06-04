@@ -15,29 +15,36 @@ async function bootstrap() {
       update: {},
       create: { nome: 'GERENTE' },
     });
-    try {
-      // Supondo que NOME_USUARIO, EMAIL_USUARIO e SENHA_USUARIO estejam definidos em seu ambiente
-      const nomeUsuario = process.env.NOME_USUARIO;
-      const emailUsuario = process.env.EMAIL_USUARIO;
-      const senhaUsuario = process.env.SENHA_USUARIO;
-  
-      // Criptografa a senha antes de salvá-la
-      const senhaCriptografada = await BcryptUtils.criptografarSenha(senhaUsuario);
-  
-      // Cria o usuário com a senha criptografada
-      await prisma.usuario.create({
-        data: {
-          nome: nomeUsuario,
-          email: emailUsuario,
-          senha: senhaCriptografada, // Usa a senha criptografada
-          roleId: gerenteRole.id, 
-        },
-      }); 
-    }catch(err){
-      console.log('Base de dados já está populada');
-    }finally {
-      await prisma.$disconnect();
-    }
+    await prisma.role.upsert({
+      where: { nome: 'ESTOQUE' },
+      update: {},
+      create: { nome: 'ESTOQUE' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'VENDEDOR' },
+      update: {},
+      create: { nome: 'VENDEDOR' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'ADMINISTRATIVO' },
+      update: {},
+      create: { nome: 'ADMINISTRATIVO' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'FINANCEIRO' },
+      update: {},
+      create: { nome: 'FINANCEIRO' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'MARKETING' },
+      update: {},
+      create: { nome: 'MARKETING' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'LOGISTICA' },
+      update: {},
+      create: { nome: 'LOGISTICA' },
+    });
   }
   app.enableCors({
     origin: '*',

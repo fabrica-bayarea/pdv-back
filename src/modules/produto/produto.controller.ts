@@ -38,7 +38,7 @@ export class ProdutoController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  @Roles(Role.GERENTE,Role.ESTOQUE)
+  @Roles(Role.VENDEDOR,Role.ESTOQUE)
   findOne(@Param('id') id: string) {
     return this.produtoService.findOne(+id);
   }

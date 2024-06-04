@@ -12,8 +12,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log("Fez o validate!!!")
+    console.log("Fez o validate!!!");
+    // Atribui diretamente payload.roles ao campo roles do objeto user
     const user = { id: payload.id, nome: payload.nome, email: payload.email, roles: payload.roles };
     return user;
-  }
+  }  
 }

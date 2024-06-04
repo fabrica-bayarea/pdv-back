@@ -37,13 +37,12 @@ export class JwtAuthGuard implements CanActivate {
 
     const user = this.decodeToken(token, process.env.JWT_SECRET_KEY);
 
-    //Função que retorna o nome do role baseado no ID
-    const roleUser = RoleUtils.getStringById(user.role);
+    const roleNames = RoleUtils.getStringsByIds(user.roles);
 
-    // Itera sobre os requiredRoles para verificar se algum deles corresponde ao role do usuário
-    if (!requiredRoles.some(requiredRole => requiredRole === user.role)) {
-      // Lança uma exceção de não autorizado se nenhum dos requiredRoles corresponder ao role do usuário
-      throw new UnauthorizedException(`Usuário com role ${roleUser} não autorizado para acessar esta rota`);
+    // Itera sobre os requiredRoles para verificar se algum deles corresponde a uma das roles do usuário
+    if (!requiredRoles.some(requiredRole => user.roles.includes(requiredRole))) {
+      // Lança uma exceção de não autorizado se nenhum dos requiredRoles corresponder a uma das roles do usuário
+      throw new UnauthorizedException(`Usuário com roles ${roleNames.join(', ')} não autorizado para acessar esta rota`);
     }
 
     return true; // Se a comparação for bem-sucedida, permite o acesso
