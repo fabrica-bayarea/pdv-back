@@ -9,8 +9,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   if(process.env.NODE_ENV === 'development'){
     const prisma = new PrismaClient();
-    // Cria a role de gerente se ela ainda não existir
-    const gerenteRole = await prisma.role.upsert({
+    await prisma.role.upsert({
       where: { nome: 'GERENTE' },
       update: {},
       create: { nome: 'GERENTE' },
