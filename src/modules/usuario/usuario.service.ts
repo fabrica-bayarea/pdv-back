@@ -61,8 +61,11 @@ export class UsuarioService {
             }
         };
         
+        // Transformar os nomes das roles em maiúsculas
+        const rolesUpcase = roles.map(role => role.toUpperCase());
+
         // Verificar se os nomes das roles são válidos e obter seus IDs
-        const roleIds = roles.map(roleName => RoleUtils.findEnumByString(roleName));
+        const roleIds = rolesUpcase.map(roleName => RoleUtils.findEnumByString(roleName));
 
         // Criar o usuário
         const usuario = await this.prisma.usuario.create({

@@ -10,4 +10,8 @@ export class ReturnProdutoDto {
   readonly preco: number;
   readonly estoque_atual: number;
   readonly data_criacao: Date;
+
+  constructor(init: Partial<ReturnProdutoDto>) {
+    Object.assign(this, init);
+  }
 }

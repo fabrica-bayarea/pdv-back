@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { VendedorService } from './vendedor.service';
 import { Vendedor } from '@prisma/client'; 
 import { CreateVendedorDTO } from './dto/create-vendedor.dto';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { UseGuards } from '@nestjs/common';
+import { VendedorService } from './vendedor.service';
 
 @Controller('vendedor') 
 @UseGuards(JwtAuthGuard)

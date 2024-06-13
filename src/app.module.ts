@@ -13,17 +13,19 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { ContagemMensalModule } from './modules/contagem-mensal/contagem-mensal.module';
 import { NotaFiscalEntradaModule } from './modules/nota-fiscal-entrada/nota-fiscal-entrada.module';
-import { ItemModule } from './modules/items/items.module';
+import { ItemModule } from './modules/itens-de-estoque/items.module';
 import { FinalizadorModule } from './modules/finalizador/finalizador.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
 import { SolicitacaoCompraModule } from './modules/solicitacao_compra/solicitacao_compra.module';
 import { ProdutoSolicitacaoModule } from './modules/produto_solicitacao/produto_solicitacao.module';
 import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 import { CarrinhoModule } from './modules/carrinho/carrinho.module';
+import { ItemCarrinho } from './modules/item-carrinho/entities/item-carrinho.entity';
+import { JwtModule } from '@nestjs/jwt';
+
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule, ConfigModule.forRoot(), CarrinhoModule
+  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule, ConfigModule.forRoot(), CarrinhoModule, ItemCarrinho,
   ],
   controllers: [AppController],
   providers: [
