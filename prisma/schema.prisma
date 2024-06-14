@@ -46,7 +46,7 @@ model Vendedor {
   nome            String
   telefone        String?
   endereco        String?
-  data_nascimento DateTime
+  dataNascimento DateTime
   vendas          Venda[]
 }
 

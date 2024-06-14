@@ -4,6 +4,13 @@ import { PrismaClient } from '@prisma/client';
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
   fichaTecnica: any;
+  private _vendedor: any;
+  public get vendedor(): any {
+    return this._vendedor;
+  }
+  public set vendedor(value: any) {
+    this._vendedor = value;
+  }
   async onModuleInit() {
     await this.$connect();
   }

@@ -22,6 +22,5 @@ export class CreateVendedorDTO {
   endereco?: string;
 
   @IsNotEmpty()
-  dataNascimento: Date; 
-  data_nascimento: any;
+  dataNascimento: Date;
 }

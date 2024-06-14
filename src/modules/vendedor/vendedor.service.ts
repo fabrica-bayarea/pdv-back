@@ -20,12 +20,8 @@ export class VendedorService {
   async create(data: CreateVendedorDTO): Promise<Vendedor> {
     return this.prisma.vendedor.create({
       data: {
-        cpf: data.cpf,
-        email: data.email,
-        nome: data.nome,
-        telefone: data.telefone,
-        endereco: data.endereco,
-        data_nascimento: data.data_nascimento,
+        ...data,
+        dataNascimento: new Date(data.dataNascimento),
       },
     });
   }
@@ -39,7 +35,7 @@ export class VendedorService {
         nome: data.nome,
         telefone: data.telefone,
         endereco: data.endereco,
-        data_nascimento: data.data_nascimento,
+        dataNascimento: data.dataNascimento,
       },
     });
   }

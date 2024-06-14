@@ -23,7 +23,6 @@ import { CarrinhoModule } from './modules/carrinho/carrinho.module';
 import { ItemCarrinho } from './modules/item-carrinho/entities/item-carrinho.entity';
 import { JwtModule } from '@nestjs/jwt';
 
-
 @Module({
   imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule, ConfigModule.forRoot(), CarrinhoModule, ItemCarrinho,
   ],

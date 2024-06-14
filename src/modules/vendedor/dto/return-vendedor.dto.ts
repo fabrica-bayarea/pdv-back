@@ -4,7 +4,7 @@ export class UpdateVendedorDTO {
     nome?: string;
     telefone?: string;
     endereco?: string;
-    data_nascimento?: Date;
+    dataNascimento?: Date;
   
     toObject() {
       const updateObject: Record<string, any> = {};
@@ -14,7 +14,7 @@ export class UpdateVendedorDTO {
       if (this.nome !== undefined) updateObject.nome = this.nome;
       if (this.telefone !== undefined) updateObject.telefone = this.telefone;
       if (this.endereco !== undefined) updateObject.endereco = this.endereco;
-      if (this.data_nascimento !== undefined) updateObject.data_nascimento = this.data_nascimento;
+      if (this.dataNascimento !== undefined) updateObject.dataNascimento = this.dataNascimento;
       
       return updateObject;
     }
