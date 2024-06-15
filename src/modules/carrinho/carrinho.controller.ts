@@ -18,7 +18,7 @@ export class CarrinhoController {
   ) {}
 
   @Get(':idCliente')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
 async findAllByCliente(@Param('idCliente') idCliente: number): Promise<any> {
   const cliente: Cliente = await this.clienteService.findOne(idCliente);
   if (!cliente) {
@@ -28,19 +28,19 @@ async findAllByCliente(@Param('idCliente') idCliente: number): Promise<any> {
 }
 
   @Post()
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   async create(@Body() createCarrinhoDto: CreateCarrinhoDTO): Promise<any> {
     return this.carrinhoService.create(createCarrinhoDto);
   }
 
   @Put(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   async update(@Param('id') id: number, @Body() updateCarrinhoDto: UpdateCarrinhoDTO): Promise<any> {
     return this.carrinhoService.update(id, updateCarrinhoDto);
   }
 
   @Delete(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   async remove(@Param('id') id: number): Promise<any> {
     return this.carrinhoService.remove(id);
   }
