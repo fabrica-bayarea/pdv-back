@@ -14,45 +14,45 @@ export class ProdutoSolicitacaoController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   create(@Body() createProdutoSolicitacaoDto: CreateProdutoSolicitacaoDto) {
     return this.produtoSolicitacaoService.create(createProdutoSolicitacaoDto);
   }
 
   @Get()
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   findAll() {
     return this.produtoSolicitacaoService.findAll();
   }
 
   @Get('solicitacao/:solicitacaoCompraId')
-  @Roles(Role.GERENTE) 
+  @Roles(Role.GERENTE, Role.VENDEDOR) 
   findAllBySolicitacao(@Param('solicitacaoCompraId') solicitacaoCompraId: string) {
     return this.produtoSolicitacaoService.findAllBySolicitacaoCompraId(+solicitacaoCompraId);
   }
 
 
   @Get(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   findOne(@Param('id') id: string) {
     return this.produtoSolicitacaoService.findOne(+id);
   }
 
   @Put(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   update(@Param('id') id: string, @Body() updateProdutoSolicitacaoDto: UpdateProdutoSolicitacaoDto) {
     return this.produtoSolicitacaoService.update(+id, updateProdutoSolicitacaoDto);
   }
 
   @Delete(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
     return this.produtoSolicitacaoService.remove(+id);
   }
 
   @Delete()
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   @HttpCode(HttpStatus.NO_CONTENT)
   removeByCodigoProduto(@Body() body: { solicitacaoCompraId: number, codigo_produto: string }) {
     const { solicitacaoCompraId, codigo_produto } = body;
@@ -62,13 +62,13 @@ export class ProdutoSolicitacaoController {
 
   @Delete('cancelar/:solicitacaoCompraId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   async cancelar(@Param('solicitacaoCompraId') solicitacaoCompraId: string): Promise<void> {
     return this.produtoSolicitacaoService.cancelar(+solicitacaoCompraId);
   }
 
   @Put('finalizar/:solicitacaoCompraId')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   async finalizar(@Param('solicitacaoCompraId') solicitacaoCompraId: string): Promise<void> {
     return this.produtoSolicitacaoService.finalizar(+solicitacaoCompraId);
   }
