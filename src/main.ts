@@ -8,19 +8,41 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   if(process.env.NODE_ENV === 'development'){
     const prisma = new PrismaClient();
-    try{
-      await prisma.usuario.create({
-        data: {
-          nome: process.env.NOME_USUARIO,
-          email: process.env.EMAIL_USUARIO,
-          senha: process.env.SENHA_USUARIO,
-        },
-      });
-    }catch(err){
-      console.log('Base de dados já está populada');
-    }finally {
-      await prisma.$disconnect();
-    }
+    await prisma.role.upsert({
+      where: { nome: 'GERENTE' },
+      update: {},
+      create: { nome: 'GERENTE' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'ESTOQUE' },
+      update: {},
+      create: { nome: 'ESTOQUE' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'VENDEDOR' },
+      update: {},
+      create: { nome: 'VENDEDOR' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'ADMINISTRATIVO' },
+      update: {},
+      create: { nome: 'ADMINISTRATIVO' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'FINANCEIRO' },
+      update: {},
+      create: { nome: 'FINANCEIRO' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'MARKETING' },
+      update: {},
+      create: { nome: 'MARKETING' },
+    });
+    await prisma.role.upsert({
+      where: { nome: 'LOGISTICA' },
+      update: {},
+      create: { nome: 'LOGISTICA' },
+    });
   }
   app.enableCors({
     origin: '*',

@@ -3,21 +3,33 @@ import { JwtService } from '@nestjs/jwt';
 import { UsuarioDto } from '../usuario/dto/usuario.dto';
 import { UsuarioService } from './../usuario/usuario.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { RoleUtils } from '../enums/role.enum';
+
 
 @Injectable()
 export class AuthService {
     constructor(
         private usuarioService:UsuarioService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
     ){}
     async login(usr: UsuarioDto) {
         const usuario = await this.validarUsuario(usr.email, usr.senha);
-        const payload = { id:usuario.id, nome: usuario.nome, email: usuario.email};
-        console.log(this.jwtService)
+        // Busca todas as funções associadas ao usuário
+        const usuarioRoles = await this.usuarioService.getUsuarioRoles(usuario.id)
+        // Cria o payload com id, nome, email e roles (IDs)
+        const payload = {
+          id: usuario.id,
+          nome: usuario.nome,
+          email: usuario.email,
+          roles: usuarioRoles.map(role => role.roleId), // Inclui os IDs das funções associadas
+        };
+      
+        console.log(payload);
         return {
-            access_token: this.jwtService.sign(payload),
+          access_token: this.jwtService.sign(payload),
         };
     }
+      
     async validarUsuario(email: string, senha: string): Promise<any> {
         const usuario:UsuarioDto = await this.usuarioService.getUsuario(email);
         const isSenhaValida = await BcryptUtils.compararSenhas(senha,usuario.senha);
