@@ -12,31 +12,31 @@ export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
 
   @Get()
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR, Role.FINANCEIRO)
   async findAll(): Promise<Cliente[]> {
     return this.clienteService.findAllClientes();
   }
 
   @Get(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR, Role.FINANCEIRO)
   async findOne(@Param('id') id: string): Promise<Cliente> {
     return this.clienteService.findClienteById(parseInt(id, 10));
   }
 
   @Post()
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR, Role.FINANCEIRO)
   async create(@Body() clienteData: Cliente): Promise<Cliente> {
     return this.clienteService.createCliente(clienteData);
   }
 
   @Put(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR, Role.FINANCEIRO)
   async update(@Param('id') id: string, @Body() clienteData: Cliente): Promise<Cliente> {
     return this.clienteService.updateCliente(parseInt(id, 10), clienteData);
   }
 
   @Delete(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR, Role.FINANCEIRO)
   async remove(@Param('id') id: string): Promise<void> {
     this.clienteService.deleteCliente(parseInt(id, 10));
   }

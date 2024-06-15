@@ -13,31 +13,31 @@ export class VendaController {
   constructor(private readonly vendaService: VendaService) {}
 
   @Post()
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   create(@Body() createVendaDto: CreateVendaDto) {
     return this.vendaService.create(createVendaDto);
   }
 
   @Get()
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   findAll() {
     return this.vendaService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   findOne(@Param('id') id: string) {
     return this.vendaService.findOne(+id);
   }
 
   @Patch(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   update(@Param('id') id: string, @Body() updateVendaDto: UpdateVendaDto) {
     return this.vendaService.update(+id, updateVendaDto);
   }
 
   @Delete(':id')
-  @Roles(Role.GERENTE)
+  @Roles(Role.GERENTE, Role.VENDEDOR)
   remove(@Param('id') id: string) {
     return this.vendaService.remove(+id);
   }
