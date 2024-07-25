@@ -22,9 +22,28 @@ import { ConfigModule } from '@nestjs/config';
 import { CarrinhoModule } from './modules/carrinho/carrinho.module';
 import { ItemCarrinho } from './modules/item-carrinho/entities/item-carrinho.entity';
 import { JwtModule } from '@nestjs/jwt';
+//import { AjusteEstoqueModule } from './modules/ajusteEstoque/ajuste-estoque.module';
 
 @Module({
-  imports: [FornecedorModule, CategoriaModule, ProdutoModule, AuthModule, VendedorModule, NotaFiscalModule, ContagemMensalModule, NotaFiscalEntradaModule, PrismaModule, ItemModule, FinalizadorModule, ClienteModule, SolicitacaoCompraModule, ProdutoSolicitacaoModule, ConfigModule.forRoot(), CarrinhoModule, ItemCarrinho,
+  imports: [
+    FornecedorModule,
+    CategoriaModule,
+    ProdutoModule,
+    AuthModule,
+    VendedorModule,
+    NotaFiscalModule,
+    ContagemMensalModule,
+    NotaFiscalEntradaModule,
+    PrismaModule,
+    ItemModule,
+    FinalizadorModule,
+    ClienteModule,
+    SolicitacaoCompraModule,
+    ProdutoSolicitacaoModule,
+    ConfigModule.forRoot(),
+    CarrinhoModule,
+    ItemCarrinho,
+    //AjusteEstoqueModule,
   ],
   controllers: [AppController],
   providers: [
@@ -34,7 +53,6 @@ import { JwtModule } from '@nestjs/jwt';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    
   ],
 })
 export class AppModule {}

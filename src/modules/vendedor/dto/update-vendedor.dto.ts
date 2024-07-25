@@ -22,5 +22,6 @@ export class UpdateVendedorDTO {
   endereco?: string;
 
   @IsOptional()
-  dataNascimento?: Date;
+  dataNascimento: Date;
+  data_nascimento: any;
 }

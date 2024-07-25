@@ -23,4 +23,5 @@ export class CreateVendedorDTO {
 
   @IsNotEmpty()
   dataNascimento: Date;
+  data_nascimento: any;
 }

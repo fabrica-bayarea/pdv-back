@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProdutoSolicitacaoDto } from './dto/create-produto_solicitacao.dto';
-import { UpdateProdutoSolicitacaoDto } from './dto/update-produto_solicitacao.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ReturnProdutoSolicitacaoDto } from './dto/return-produto_solicitacao.dto';
 import { SolicitacaoCompraService } from '../solicitacao_compra/solicitacao_compra.service';
 import { ProdutoService } from '../produto/produto.service';
 import { ReturnProdutoSolicitacaoCompletoDto } from './dto/return-produto_solicitacao_completo.dto';
+import { UpdateProdutoSolicitacaoDto } from './dto/update-produto_solicitacao.dto';
 
 @Injectable()
 export class ProdutoSolicitacaoService {
@@ -14,25 +14,26 @@ export class ProdutoSolicitacaoService {
     private readonly produtoService: ProdutoService,
     private readonly solicitacaoCompraService: SolicitacaoCompraService,
   ) {}
+
   async create(createProdutoSolicitacaoDto: CreateProdutoSolicitacaoDto): Promise<ReturnProdutoSolicitacaoCompletoDto> {
     const { solicitacaoCompraId, codigo_produto, quantidade } = createProdutoSolicitacaoDto;
-  
+
     // Verificar se a solicitação de compra existe
     const solicitacaoCompra = await this.solicitacaoCompraService.findOne(solicitacaoCompraId);
     if (!solicitacaoCompra) {
       throw new NotFoundException(`Solicitação de compra com ID ${solicitacaoCompraId} não encontrada`);
     }
-  
-    if(!solicitacaoCompra.ativo){
+
+    if (!solicitacaoCompra.ativo) {
       throw new BadRequestException("Solicitação requerida está encerrada.");
     }
-  
+
     // Verificar se o código do produto existe
     const produto = await this.produtoService.findByCodigoProduto(codigo_produto);
     if (!produto) {
       throw new NotFoundException(`Produto com código ${codigo_produto} não encontrado`);
     }
-  
+
     // Verificar se já existe uma solicitação com o mesmo código de produto
     const existingProdutoSolicitacao = await this.prisma.produtoSolicitacao.findFirst({
       where: {
@@ -40,7 +41,7 @@ export class ProdutoSolicitacaoService {
         solicitacaoCompraId,
       },
     });
-  
+
     if (existingProdutoSolicitacao) {
       // Se já existir, atualize a quantidade na entidade existente
       const updatedProdutoSolicitacao = await this.prisma.produtoSolicitacao.update({
@@ -53,7 +54,7 @@ export class ProdutoSolicitacaoService {
           },
         },
       });
-  
+
       const returnProdutoSolicitacaoCompletoDto: ReturnProdutoSolicitacaoCompletoDto = {
         id: updatedProdutoSolicitacao.id,
         solicitacaoCompraId: updatedProdutoSolicitacao.solicitacaoCompraId,
@@ -65,15 +66,21 @@ export class ProdutoSolicitacaoService {
         controle: updatedProdutoSolicitacao.controle,
         descricao: updatedProdutoSolicitacao.descricao,
       };
-  
+
       return returnProdutoSolicitacaoCompletoDto;
     }
-  
+
     // Se não existir, crie uma nova entrada
     const novoProdutoSolicitacao = await this.prisma.produtoSolicitacao.create({
-      data: createProdutoSolicitacaoDto,
+      data: {
+        solicitacaoCompraId,
+        codigo_produto,
+        quantidade,
+        descricao: createProdutoSolicitacaoDto.descricao,
+        controle: createProdutoSolicitacaoDto.controle,
+      },
     });
-  
+
     const returnProdutoSolicitacaoCompletoDto: ReturnProdutoSolicitacaoCompletoDto = {
       id: novoProdutoSolicitacao.id,
       solicitacaoCompraId: novoProdutoSolicitacao.solicitacaoCompraId,
@@ -85,18 +92,18 @@ export class ProdutoSolicitacaoService {
       controle: novoProdutoSolicitacao.controle,
       descricao: novoProdutoSolicitacao.descricao,
     };
-  
+
     return returnProdutoSolicitacaoCompletoDto;
   }
 
   async findAll(): Promise<ReturnProdutoSolicitacaoCompletoDto[]> {
     const produtoSolicitacoes = await this.prisma.produtoSolicitacao.findMany();
-  
+
     const produtosCompletos: ReturnProdutoSolicitacaoCompletoDto[] = [];
-  
+
     for (const produtoSolicitacao of produtoSolicitacoes) {
       const produto = await this.produtoService.findByCodigoProduto(produtoSolicitacao.codigo_produto);
-  
+
       if (produto) {
         const produtoCompleto: ReturnProdutoSolicitacaoCompletoDto = {
           id: produtoSolicitacao.id,
@@ -109,14 +116,13 @@ export class ProdutoSolicitacaoService {
           controle: produtoSolicitacao.controle,
           descricao: produtoSolicitacao.descricao,
         };
-  
+
         produtosCompletos.push(produtoCompleto);
       }
     }
-  
+
     return produtosCompletos;
   }
-  
 
   async findOne(id: number): Promise<ReturnProdutoSolicitacaoCompletoDto> {
     const produtoSolicitacao = await this.prisma.produtoSolicitacao.findUnique({

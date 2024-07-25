@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 export class PrismaService extends PrismaClient implements OnModuleInit {
   fichaTecnica: any;
   private _vendedor: any;
+  ajusteEstoque: any;
   public get vendedor(): any {
     return this._vendedor;
   }
